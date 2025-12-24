@@ -3,16 +3,16 @@
     <div id="wb-home-banner" class="swiper wb-home-banner-swiper">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
-                <img src="asset/img/banner/b1.jpg" alt="Banner 1">
+                <img src="{{ asset('asset/img/banner/b1.jpg') }}" alt="Banner 1">
             </div>
             <div class="swiper-slide">
-                <img src="asset/img/banner/b2.jpg" alt="Banner 2">
+                <img src="{{ asset('asset/img/banner/b2.jpg') }}" alt="Banner 2">
             </div>
             <div class="swiper-slide">
-                <img src="asset/img/banner/b3.jpg" alt="Banner 3">
+                <img src="{{ asset('asset/img/banner/b3.jpg') }}" alt="Banner 3">
             </div>
             <div class="swiper-slide">
-                <img src="asset/img/banner/b4.jpg" alt="Banner 4">
+                <img src="{{ asset('asset/img/banner/b4.jpg') }}" alt="Banner 4">
             </div>
             <!-- <div class="swiper-slide">
                 <img src="asset/img/banner/b5.jpg" alt="Banner 5">
@@ -47,7 +47,7 @@
             <!-- Right Visual with Video -->
             <div class="welcome-visual">
                 <div class="video-container" onclick="playVideo()">
-                    <img src="asset/img/product/weicon-bio-cut-schneidoel.jpg   " alt="Industrial Automation" class="video-thumbnail">
+                    <img src="{{ asset('asset/img/product/weicon-bio-cut-schneidoel.jpg') }}   " alt="Industrial Automation" class="video-thumbnail">
 
                     <div class="video-overlay">
                         <div class="play-button">
@@ -91,13 +91,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-1">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/WEICON-Pool-Repair-Kit-1.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/WEICON-Pool-Repair-Kit-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/WEICON-Pool-Repair-Kit-2.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/WEICON-Pool-Repair-Kit-1.jpg') }}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -123,13 +123,15 @@
                             <div class="swiper product-image-swiper product-image-swiper-1">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Repair-Tape-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Repair-Tape-1.jpg') }}" alt="Product">
+                                         <!-- <img src="{{ asset('/asset/img/product/repair-tape-1.jpg') }}"> -->
+
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Repair-Tape-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Repair-Tape-2.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Repair-Tape-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Repair-Tape-3.jpg') }}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -155,13 +157,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-1">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Flat-and-Round-Cable-Stripper-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Flat-and-Round-Cable-Stripper-1.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Flat-and-Round-Cable-Stripper-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Flat-and-Round-Cable-Stripper-2.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Flat-and-Round-Cable-Stripper-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Flat-and-Round-Cable-Stripper-3.jpg') }}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -187,13 +189,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-1">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Wire-Stripper-No-5-Pro-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Wire-Stripper-No-5-Pro-1.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Wire-Stripper-No-5-Pro-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Wire-Stripper-No-5-Pro-2.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Wire-Stripper-No-5-Pro-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Wire-Stripper-No-5-Pro-3.jpg') }}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -219,13 +221,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-1">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Smoke-Detector-Test-Spray-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Smoke-Detector-Test-Spray-1.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Smoke-Detector-Test-Spray-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Smoke-Detector-Test-Spray-2.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Smoke-Detector-Test-Spray-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Smoke-Detector-Test-Spray-3.jpg') }}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -251,13 +253,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-1">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Leak-Detection-Spray-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Leak-Detection-Spray-1.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Leak-Detection-Spray-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Leak-Detection-Spray-2.jpg') }}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Leak-Detection-Spray-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Leak-Detection-Spray-3.jpg') }}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -353,7 +355,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <div class="chem-visual-wrapper">
-                        <img src="asset/img/product/home-image.jpg" alt="Industrial Chemical Supplier" class="img-fluid">
+                        <img src="{{ asset('asset/img/product/home-image.jpg') }}" alt="Industrial Chemical Supplier" class="img-fluid">
                     </div>
                 </div>
                 <div class="col-md-6 ps-3 chem-info-container">
@@ -397,13 +399,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-2">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/WEICON-Pool-Repair-Kit-1.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/WEICON-Pool-Repair-Kit-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/WEICON-Pool-Repair-Kit-2.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/WEICON-Pool-Repair-Kit-1.jpg')}}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -432,13 +434,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-2">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Repair-Tape-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Repair-Tape-1.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Repair-Tape-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Repair-Tape-2.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Repair-Tape-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Repair-Tape-3.jpg')}}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -464,13 +466,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-2">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Flat-and-Round-Cable-Stripper-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Flat-and-Round-Cable-Stripper-1.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Flat-and-Round-Cable-Stripper-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Flat-and-Round-Cable-Stripper-2.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Flat-and-Round-Cable-Stripper-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Flat-and-Round-Cable-Stripper-3.jpg')}}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -496,13 +498,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-2">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Wire-Stripper-No-5-Pro-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Wire-Stripper-No-5-Pro-1.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Wire-Stripper-No-5-Pro-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Wire-Stripper-No-5-Pro-2.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Wire-Stripper-No-5-Pro-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Wire-Stripper-No-5-Pro-3.jpg')}}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -528,13 +530,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-2">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Smoke-Detector-Test-Spray-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Smoke-Detector-Test-Spray-1.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Smoke-Detector-Test-Spray-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Smoke-Detector-Test-Spray-2.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Smoke-Detector-Test-Spray-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Smoke-Detector-Test-Spray-3.jpg')}}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -560,13 +562,13 @@
                             <div class="swiper product-image-swiper product-image-swiper-2">
                                 <div class="swiper-wrapper">
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Leak-Detection-Spray-1.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Leak-Detection-Spray-1.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Leak-Detection-Spray-2.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Leak-Detection-Spray-2.jpg')}}" alt="Product">
                                     </div>
                                     <div class="swiper-slide">
-                                        <img src="asset/img/product/Leak-Detection-Spray-3.jpg" alt="Product">
+                                        <img src="{{ asset('asset/img/product/Leak-Detection-Spray-3.jpg')}}" alt="Product">
                                     </div>
                                 </div>
                             </div>
@@ -591,5 +593,7 @@
         </div>
     </div>
 
-    <script src="{{ asset('asset/js/swiper.js') }}"></script>
+@push('scripts')
+<!-- <script src="{{ asset('asset/js/swiper.js') }}"></script> -->
+@endpush
 @endsection
