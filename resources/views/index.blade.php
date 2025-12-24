@@ -594,6 +594,6 @@
     </div>
 
 @push('scripts')
-<!-- <script src="{{ asset('asset/js/swiper.js') }}"></script> -->
+<script src="{{ asset('asset/js/swiper.js') }}"></script>
 @endpush
 @endsection

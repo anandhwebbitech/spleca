@@ -39,7 +39,7 @@
                      <!-- Right Logo (CENTER ON MOBILE) -->
                      <a class="navbar-brand order-2 order-md-3  text-center mt-2 mt-md-0" href="#">
                          <div class="weicon-logo poss">
-                             <img src="{{ asset('asset/img/logo_weicon.svg') }}" alt="">
+                             <img src="asset/img/logo_weicon.svg" alt="">
                          </div>
                      </a>
 
@@ -234,7 +234,7 @@
                          <div class="wb-cart-item">
 
                              <!-- Product Image -->
-                             <img src="{{ asset('asset/img/product/Leak-Detection-Spray-1.jpg') }}" class="wb-cart-img" alt="Product">
+                             <img src="asset/img/product/Leak-Detection-Spray-1.jpg" class="wb-cart-img" alt="Product">
 
                              <!-- Middle Content -->
                              <div class="wb-cart-info">
@@ -269,20 +269,36 @@
      </div>
  </div>
  <!-- HEADER -->
- <!-- <header class="wb-header">
+ <header class="wb-header">
      <button class="wb-hamburger-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
          <i class="fa-solid fa-bars"></i>
      </button>
 
      <div class="wb-header-actions">
+         <!-- Wishlist -->
          <div class="wb-action-item" id="wishlistBtn">
              <a href="wishlist.php">
                  <i class="fa-regular fa-heart"></i>
              </a>
              <span class="wb-badge">3</span>
-             
+             <!-- <div class="wb-dropdown" id="wishlistDropdown">
+                        <div class="wb-dropdown-header">Wishlist (3 items)</div>
+                        <a href="#" class="wb-dropdown-item">
+                            <i class="fa-solid fa-wrench"></i>
+                            <span>Hydraulic Pump</span>
+                        </a>
+                        <a href="#" class="wb-dropdown-item">
+                            <i class="fa-solid fa-screwdriver"></i>
+                            <span>Electric Motor</span>
+                        </a>
+                        <a href="#" class="wb-dropdown-item">
+                            <i class="fa-solid fa-cog"></i>
+                            <span>Servo Drive</span>
+                        </a>
+                    </div> -->
          </div>
 
+         <!-- Profile -->
          <div class="wb-action-item" id="profileBtn">
              <i class="fa-regular fa-user"></i>
              <div class="wb-dropdown" id="profileDropdown">
@@ -310,6 +326,7 @@
              </div>
          </div>
 
+         <!-- Cart -->
          <div class="wb-action-item">
              <a href="wishlist.php" class="wb-cart-btn" id="cartBtn">
                  <i class="fa-solid fa-cart-shopping"></i>
@@ -323,7 +340,7 @@
              </div>
          </div>
      </div>
- </header> -->
+ </header>
 
  <!-- MOBILE SIDEBAR -->
  <nav id="wb-mobile-nav" class="wb-mobile-nav" aria-hidden="true">
@@ -462,5 +479,4 @@
          </div>
      </div>
  </nav>
-
  

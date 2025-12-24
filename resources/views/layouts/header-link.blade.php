@@ -12,3 +12,6 @@
 
 <!-- Custom CSS -->
 <link href="{{ asset('asset/css/style.css') }}" rel="stylesheet">
+<link href="{{ asset('asset/css/nav-bar-mobile.css') }}" rel="stylesheet" >
+<link href="{{ asset('asset/css/responsive.css') }}" rel="stylesheet" >
+
