@@ -57,10 +57,10 @@
      <div class="navigation-wrapper">
          <ul class="primary-menu">
              <li class="menu-item">
-                 <a class="menu-link" href="index.php">Home</a>
+                 <a class="menu-link" href="{{ route('homepage') }}">Home</a>
              </li>
              <li class="menu-item">
-                 <a class="menu-link" href="about.php">About</a>
+                 <a class="menu-link" href="{{route('aboutpage')}}">About</a>
              </li>
              <li class="menu-item">
                  <a class="menu-link has-dropdown" href="#">
@@ -182,7 +182,7 @@
                              </h6>
                              <ul class="category-grid">
                                  <li class="category-card">
-                                     <a href="newsletter.php">
+                                     <a href="{{route('newsletterpage')}}">
                                          <i class="fas fa-newspaper"></i> News Letter
                                      </a>
                                  </li>
@@ -192,7 +192,7 @@
                  </div>
              </li>
              <li class="menu-item">
-                 <a class="menu-link btn-contact" href="contact.php">
+                 <a class="menu-link btn-contact" href="{{route('contactpage')}}">
                      <i class="fa-solid fa-phone"></i> Contact Us
                  </a>
              </li>
@@ -200,11 +200,11 @@
 
          <!-- Icons (Right) -->
          <div class="header-actions">
-             <a href="wishlist.php" style="position: relative;">
+             <a href="{{route('wishlistpage')}}"style="position: relative;">
                  <i class="far fa-heart"></i>
                  <span class="notification-badge">3</span>
              </a>
-             <a href="#"><i class="far fa-user"></i></a>
+             <a href="{{ route('profilepage') }}"><i class="far fa-user"></i></a>
              <!-- Cart Widget -->
              <a href="#" class="cart-widget" id="cartWidget">
                  <i class="fas fa-shopping-cart"></i>
@@ -277,7 +277,7 @@
      <div class="wb-header-actions">
          <!-- Wishlist -->
          <div class="wb-action-item" id="wishlistBtn">
-             <a href="wishlist.php">
+             <a href="{{route('wishlistpage')}}">
                  <i class="fa-regular fa-heart"></i>
              </a>
              <span class="wb-badge">3</span>
@@ -311,7 +311,7 @@
                      <i class="fa-solid fa-box"></i>
                      <span>Orders</span>
                  </a>
-                 <a href="wishlist.php" class="wb-dropdown-item">
+                 <a href="{{route('wishlistpage')}}" class="wb-dropdown-item">
                      <i class="fa-solid fa-heart"></i>
                      <span>Wishlist</span>
                  </a>
@@ -328,7 +328,7 @@
 
          <!-- Cart -->
          <div class="wb-action-item">
-             <a href="wishlist.php" class="wb-cart-btn" id="cartBtn">
+             <a href="{{route('wishlistpage')}}" class="wb-cart-btn" id="cartBtn">
                  <i class="fa-solid fa-cart-shopping"></i>
                  <span>₹0.00</span>
              </a>
@@ -355,8 +355,8 @@
          </div>
 
          <ul class="wb-mobile-menu">
-             <li><a href="index.php"><i class="fa-solid fa-house"></i> Home</a></li>
-             <li><a href="about.php"><i class="fa-solid fa-circle-info"></i> About</a></li>
+             <li><a href="{{ route('homepage') }}"><i class="fa-solid fa-house"></i> Home</a></li>
+             <li><a  href="{{route('aboutpage')}}"><i class="fa-solid fa-circle-info"></i> About</a></li>
 
              <!-- PRODUCTS MENU -->
              <li class="wb-accordion">
@@ -461,7 +461,7 @@
                      <ul>
                          <li class="wb-accordion">
                              <button class="wb-accordion-toggle sub" aria-expanded="false">
-                                 <a href="newsletter.php" class="a-edit"> <span> News letter</span> </a>
+                                 <a href="{{route('newsletterpage')}}" class="a-edit"> <span> News letter</span> </a>
                              </button>
                          </li>
                      </ul>
@@ -469,11 +469,11 @@
              </li>
 
 
-             <li><a href="contact.php" class="wb-contact"><i class="fa-solid fa-phone"></i> Contact Us</a></li>
+             <li><a href="{{route('contactpage')}}" class="wb-contact"><i class="fa-solid fa-phone"></i> Contact Us</a></li>
          </ul>
 
          <div class="wb-footer">
-             <a href="#" aria-label="Wishlist"><i class="fa-regular fa-heart"></i><span class="wb-badge">3</span></a>
+             <a href="{{route('wishlistpage')}}" aria-label="Wishlist"><i class="fa-regular fa-heart"></i><span class="wb-badge">3</span></a>
              <a href="#" aria-label="User"><i class="fa-regular fa-user"></i></a>
              <a href="#" aria-label="Cart"><i class="fa-solid fa-cart-shopping"></i></a>
          </div>
