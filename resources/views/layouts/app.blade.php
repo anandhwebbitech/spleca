@@ -12,7 +12,7 @@
     <!-- Topbar -->
     @include('layouts.header-link')
 
-        @include('layouts.nav-bar')
+        <!-- @include('layouts.nav-bar') -->
 
     <!-- MAIN CONTENT AREA -->
     <main class="content-wrapper">
@@ -22,7 +22,7 @@
 
     <!-- Footer -->
 
-    @include('layouts.footer')
+    <!-- @include('layouts.footer') -->
 
     @yield('scripts')
 </body>

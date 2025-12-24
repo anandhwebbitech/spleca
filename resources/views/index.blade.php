@@ -1,6 +1,5 @@
  @extends('layouts.app')
  @section('content')
-
     <div id="wb-home-banner" class="swiper wb-home-banner-swiper">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
@@ -592,5 +591,5 @@
         </div>
     </div>
 
-    <script src="asset/js/swiper.js"></script>
+    <script src="{{ asset('asset/js/swiper.js') }}"></script>
 @endsection
