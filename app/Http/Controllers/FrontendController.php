@@ -27,4 +27,8 @@ class FrontendController extends Controller
     public function LoginPage(){ return view('pages.login');}
     public function RegisterPage(){ return view('pages.register');}
 
+
+    // Loads
+    
+
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,3 +15,5 @@ Route::get('/wishlist', [FrontendController::class, 'WishlistPage'])->name('wish
 Route::get('/profile', [FrontendController::class, 'ProfilePage'])->name('profilepage');
 Route::get('/login', [FrontendController::class, 'LoginPage'])->name('loginpage');
 Route::get('/register', [FrontendController::class, 'RegisterPage'])->name('registerpage');
+
+Route::post('/register', [AuthController::class, 'Register'])->name('register');

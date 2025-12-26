@@ -9,6 +9,8 @@
 <!-- Swiper CSS -->
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+      <!-- Swweet Alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Custom CSS -->
 <link href="{{ asset('asset/css/style.css') }}" rel="stylesheet">

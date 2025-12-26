@@ -22,17 +22,24 @@
             <a href="#" class="forgot-password">I have forgotten my password.</a>
 
             <!-- Login Button -->
-            <div class="mb-3">
-                <button type="submit" class="btn-login">Log in</button>
+            <!-- <div class="mb-3"> -->
+            <div class="row g-2 justify-content-center">
+                <div class="col-md-6">
+                    <button type="submit" class="btn-login">Log in</button>
+                </div>
             </div>
 
             <!-- Divider -->
             <div class="divider">or</div>
 
             <!-- Sign Up Button -->
-             <a href="{{ route('registerpage') }}">
-                 <button type="button" class="btn-signup" >Sign up</button>
-             </a>
+            <div class="row g-2 justify-content-center">
+                <div class="col-md-6">
+                    <a href="{{ route('registerpage') }}">
+                        <button type="button" class="btn-signup" >Sign up</button>
+                    </a>
+                </div>
+            </div>
         </form>
     </div>
 @endsection
