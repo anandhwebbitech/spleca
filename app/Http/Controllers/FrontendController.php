@@ -29,6 +29,26 @@ class FrontendController extends Controller
 
 
     // Loads
-    
+    public function login(Request $request)
+    {
+        // Validate input
+        $this->validate($request, [
+            'email'    => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        // Attempt login
+        if (Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password
+        ])) {
+            return redirect()->intended('/home'); // change if needed
+        }
+
+        // Login failed
+        return back()->withErrors([
+            'email' => 'Invalid email or password.',
+        ])->withInput();
+    }
 
 }

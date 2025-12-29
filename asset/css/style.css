@@ -4297,6 +4297,21 @@ textarea.input-field {
 .stock-badge i {
     color: #28a745;
 }
+.outstock-badge {
+    background: #d4edda;
+    color: #571519;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.outstock-badge i {
+    color: #a72828;
+}
 
 .product-meta {
     background: white;
@@ -7453,4 +7468,16 @@ label {
     background: #F4C542;
     /* gold hover */
     color: #000;
+}
+
+.tiny-btn {
+    padding: 2px 6px;
+    font-size: 11px;
+    line-height: 1;
+    border-radius: 3px;
+}
+.btn-xs {
+    padding: 2px 6px;
+    font-size: 15px;
+    line-height: 1;
 }

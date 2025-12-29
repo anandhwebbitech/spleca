@@ -86,6 +86,9 @@
 <!-- Swiper (ONLY ONE VERSION) -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- Global Site JS -->
 <script src="{{ asset('asset/js/script.js') }}"></script>
 

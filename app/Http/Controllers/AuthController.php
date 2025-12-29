@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Exception;
+use Illuminate\Support\Facades\Auth;
+
 
 
 
@@ -38,13 +40,13 @@ class AuthController extends Controller
                 'name'         => $request->first_name . ' ' . $request->last_name,
                 'email'        => $request->email,
                 'password'     => Hash::make($request->password),
+                'role'         => 2,
             ]);
 
             return response()->json([
                 'status' => true,
                 'message' => 'Registration completed successfully'
             ], 200);
-
         } catch (Exception $e) {
 
             return response()->json([
@@ -52,5 +54,43 @@ class AuthController extends Controller
                 'message' => 'Server error: ' . $e->getMessage()
             ], 500);
         }
+    }
+    public function Login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email'    => 'required|email',
+            'password' => 'required|min:8',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()->all()
+            ]);
+        }
+
+        if (Auth::attempt([
+            'email' => $request->email,
+            'password' => $request->password
+        ])) {
+            return response()->json([
+                'status' => true,
+                'redirect' => url('/home')
+            ]);
+        }
+
+        return response()->json([
+            'status' => false,
+            'errors' => ['Invalid email or password']
+        ]);
+    }
+    public function logout()
+    {
+        Auth::logout();
+        return response()->json([
+            'status' => true,
+            'redirect' => route('loginpage')
+        ]);
+        // return redirect()->route('loginpage');
     }
 }

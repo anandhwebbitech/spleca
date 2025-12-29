@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,4 +18,32 @@ Route::get('/profile', [FrontendController::class, 'ProfilePage'])->name('profil
 Route::get('/login', [FrontendController::class, 'LoginPage'])->name('loginpage');
 Route::get('/register', [FrontendController::class, 'RegisterPage'])->name('registerpage');
 
+Route::get('/category', [CategoryController::class, 'CategoryPage'])->name('categorypage');
+Route::get('sub-category-fetch',[CategoryController::class, 'fetch'] )->name('categoryfetch');
+Route::post('sub-category-store', [CategoryController::class, 'store'])->name('categorstore');
+Route::get('sub-category-edit/{id}',[CategoryController::class, 'edit'] )->name('categoryedit');
+Route::post('sub-category-update', [CategoryController::class, 'update'])->name('categoryupdate');
+Route::delete('sub-category-delete/{id}', [CategoryController::class, 'destroy'])->name('categorydestroy');
+Route::post('sub-category-status', [CategoryController::class, 'changeStatus'])->name('subcategorystatus');
+
 Route::post('/register', [AuthController::class, 'Register'])->name('register');
+// AUTH
+Route::post('login', [AuthController::class,'Login'])->name('login');
+Route::post('/logout', [AuthController::class,'Logout'])->name('logout');
+
+Route::get('/product', [ProductController::class, 'ProductPage'])->name('productpage');
+Route::get('product-fetch', [ProductController::class,'fetch'])->name('productfetch');
+Route::post('product-store', [ProductController::class,'store'])->name('productstore');
+Route::post('product-update', [ProductController::class,'update'])->name('productupdate');
+Route::delete('product-delete/{id}', [ProductController::class,'destroy']);
+Route::get('/product-edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+Route::delete('/product-image-delete/{id}', [ProductController::class, 'deleteImage']);
+
+Route::get('/product/{id}', [ProductController::class, 'show']);
+
+
+Route::post('product-resource/store', [ProductController::class, 'ProductResourceStore'])->name('product-resource.store');
+Route::get('product-resource/edit/{id}', [ProductController::class, 'ProductResourceEdit']);
+Route::post('product-resource/update/{id}', [ProductController::class, 'ProductResourceUpdate']);
+Route::delete('product-resource/delete/{id}', [ProductController::class, 'ProductResourceDestroy']);
+Route::get('product-resource/{product}', [ProductController::class, 'index']);
