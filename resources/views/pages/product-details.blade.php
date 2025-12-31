@@ -1,6 +1,10 @@
  @extends('layouts.app')
  @section('content')
-
+ <style>
+     .fas.fa-heart {
+         color: red;
+     }
+ </style>
  <section class="mt-5">
      <!-- Zoom Modal -->
      <div class="zoom-modal" id="zoomModal">
@@ -105,13 +109,21 @@
 
                          <div class="button-group">
                              <button class="btn-buy">Buy Now</button>
-                             <button class="btn-cart1">Add to Cart</button>
+                             <button class="btn-cart1 add-to-cart" data-id="{{ $product->id }}">Add to Cart</button>
                          </div>
 
-                         <div class="action-links">
+                         <!-- <div class="action-links">
                              <a href="#" class="action-link">
                                  <i class="far fa-heart"></i>
                                  <span>Add to Wishlist</span>
+                         </div> -->
+                         <div class="action-links">
+                             <button type="button"
+                                 class="action-link add-to-wishlist"
+                                 data-id="{{ $product->id }}">
+                                 <i class="{{ $inWishlist ? 'fas fa-heart text-danger' : 'far fa-heart' }}"></i>
+                                 <span>Add to Wishlist</span>
+                             </button>
                          </div>
                          <a href="#" class="action-link">
                              <i class="fas fa-share-alt"></i>
@@ -168,7 +180,7 @@
                  <h4 class="wbp-heading">Product Description</h4>
 
                  <p>
-                    {{$product->description}}
+                     {{$product->description}}
                  </p>
              </div>
 
@@ -178,8 +190,8 @@
 
                  @forelse($product->datasheets as $ds)
                  <div class="pdf-box">
-                     <a href="{{ asset('uploads/product_resources/' . $ds->file) }}"
-                         target="_blank"
+                     <a href="{{ asset('public/uploads/resources/' . $ds->file) }}"
+                         download
                          class="pdf-box-link">
                          <div class="pdf-box-title">
                              {{ $ds->title ?? 'Data Sheet' }}
@@ -204,8 +216,8 @@
                      <div class="brouchers-grid">
                          @forelse($product->brochures as $b)
                          <div class="brouchers-box">
-                             <a href="{{ asset('uploads/product_resources/' . $b->file) }}"
-                                 target="_blank"
+                             <a href="{{ asset('public/uploads/resources/' . $b->file) }}"
+                                 download
                                  class="brouchers-box-link">
                                  <div class="brouchers-box-title">
                                      {{ $b->title ?? 'Brochure' }}
@@ -231,13 +243,25 @@
                      <div class="videos-grid">
                          @forelse($product->videos as $v)
                          <div class="videos-box">
-                             <a href="{{ $v->video_url }}"
-                                 target="_blank"
-                                 class="videos-box-link">
-                                 <div class="videos-box-title">
-                                     {{ $v->title ?? 'Product Video' }}
-                                 </div>
-                             </a>
+                             <div class="video-frame">
+                                 <iframe
+                                     width="100%"
+                                     height="220"
+                                     src="{{ preg_replace(
+                    '~^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)~',
+                    'https://www.youtube.com/embed/',
+                    $v->video_url
+                ) }}"
+                                     title="{{ $v->title ?? 'Product Video' }}"
+                                     frameborder="0"
+                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                     allowfullscreen>
+                                 </iframe>
+                             </div>
+
+                             <div class="videos-box-title mt-2">
+                                 {{ $v->title ?? 'Product Video' }}
+                             </div>
                          </div>
                          @empty
                          <p>No videos available</p>
@@ -310,6 +334,63 @@
 
      </div>
  </div>
+ @push('scripts')
+ <script>
+     document.addEventListener("DOMContentLoaded", function() {
 
+         /* Load wishlist count */
+         fetch("{{ route('wishlist.count') }}")
+             .then(res => res.json())
+             .then(data => {
+                 document.getElementById('wishlist-count').innerText = data.count;
+             });
+
+         /* Toggle wishlist */
+         document.querySelectorAll('.add-to-wishlist').forEach(button => {
+
+             button.addEventListener('click', function(e) {
+                 e.preventDefault();
+                 e.stopPropagation();
+
+                 const productId = this.dataset.id;
+                 const icon = this.querySelector('i');
+
+                 // Disable button while request is processing
+                 if (this.classList.contains('loading')) return;
+                 this.classList.add('loading');
+
+                 fetch("{{ route('wishlist.toggle', ':id') }}".replace(':id', productId), {
+                         method: 'POST',
+                         headers: {
+                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                             'Accept': 'application/json'
+                         }
+                     })
+                     .then(res => res.json())
+                     .then(data => {
+
+                         document.getElementById('wishlist-count').innerText = data.count;
+
+                         if (data.status === 'added') {
+                             icon.classList.remove('far');
+                             icon.classList.add('fas', 'text-danger');
+                         } else if (data.status === 'removed') {
+                             icon.classList.remove('fas', 'text-danger');
+                             icon.classList.add('far');
+                         }
+
+                     })
+                     .catch(err => console.error(err))
+                     .finally(() => {
+                         this.classList.remove('loading');
+                     });
+             });
+
+         });
+
+     });
+     
+ </script>
+ @endpush
 
  @endsection

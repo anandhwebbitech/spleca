@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\Cart;
 use App\Models\Product;
-use App\Models\ProductFeature;
-use App\Models\ProductFile;
 use App\Models\ProductImage;
 use App\Models\ProductResource;
 use Illuminate\Support\Str;
@@ -16,7 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 
 
@@ -172,8 +171,10 @@ class ProductController extends Controller
         $product = Product::with([
             'resources'
         ])->findOrFail($id);
+        $wishlist = session()->get('wishlist', []);
+        $inWishlist = in_array($product->id, $wishlist);
 
-        return view('pages.product-details', compact('product'));
+        return view('pages.product-details', compact('product', 'inWishlist'));
     }
     // 
     public function ProductResourceStore(Request $request)
@@ -184,57 +185,65 @@ class ProductController extends Controller
 
             $productId = $request->product_id;
 
+            /* ================= VALIDATION ================= */
+            $request->validate([
+                'datasheet_title.*' => 'nullable|string|max:255',
+                'datasheet_file.*'  => 'nullable|mimes:pdf|max:2048',
+                'brochure_file.*'   => 'nullable|mimes:pdf|max:10240',
+                'video_url.*'       => 'nullable|url',
+                'status'            => 'required'
+            ]);
+
             /* ================= DATA SHEET ================= */
-            if ($request->filled('datasheet_title') && $request->hasFile('datasheet_file')) {
+            if ($request->hasFile('datasheet_file')) {
+                foreach ($request->datasheet_file as $index => $file) {
 
-                $request->validate([
-                    'datasheet_title' => 'required|string|max:255',
-                    'datasheet_file'  => 'required|mimes:pdf|max:2048'
-                ]);
+                    if (!$file) continue;
 
-                $fileName = time() . '_datasheet.' . $request->datasheet_file->extension();
-                $request->datasheet_file->move(public_path('uploads/resources'), $fileName);
+                    $fileName = time() . '_' . $index . '_datasheet.' . $file->extension();
+                    $file->move(public_path('uploads/resources'), $fileName);
 
-                ProductResource::create([
-                    'product_id' => $productId,
-                    'type'       => 'datasheet',
-                    'title'      => $request->datasheet_title,
-                    'file'       => $fileName,
-                    'status'     => $request->status
-                ]);
+                    ProductResource::create([
+                        'product_id' => $productId,
+                        'type'       => 'datasheet',
+                        'title'      => $request->datasheet_title[$index] ?? null,
+                        'file'       => $fileName,
+                        'status'     => $request->status
+                    ]);
+                }
             }
 
             /* ================= BROCHURE ================= */
             if ($request->hasFile('brochure_file')) {
+                foreach ($request->brochure_file as $index => $file) {
 
-                $request->validate([
-                    'brochure_file' => 'required|mimes:pdf|max:10240'
-                ]);
+                    if (!$file) continue;
 
-                $fileName = time() . '_brochure.' . $request->brochure_file->extension();
-                $request->brochure_file->move(public_path('uploads/resources'), $fileName);
+                    $fileName = time() . '_' . $index . '_brochure.' . $file->extension();
+                    $file->move(public_path('uploads/resources'), $fileName);
 
-                ProductResource::create([
-                    'product_id' => $productId,
-                    'type'       => 'brochure',
-                    'file'       => $fileName,
-                    'status'     => $request->status
-                ]);
+                    ProductResource::create([
+                        'product_id' => $productId,
+                        'type'       => 'brochure',
+                        'file'       => $fileName,
+                        'status'     => $request->status
+                    ]);
+                }
             }
 
             /* ================= VIDEO ================= */
             if ($request->filled('video_url')) {
+                foreach ($request->video_url as $url) {
 
-                $request->validate([
-                    'video_url' => 'required|url'
-                ]);
+                    if (!$url) continue;
 
-                ProductResource::create([
-                    'product_id' => $productId,
-                    'type'       => 'video',
-                    'video_url'  => $request->video_url,
-                    'status'     => $request->status
-                ]);
+                    ProductResource::create([
+                        'product_id' => $productId,
+                        'type'       => 'video',
+                        'video_url'  => $url,
+                        'status'     => $request->status
+                    ]);
+                }
             }
 
             DB::commit();
@@ -253,7 +262,6 @@ class ProductController extends Controller
             ]);
         }
     }
-
     /* ================= EDIT ================= */
     public function ProductResourceEdit($id)
     {
@@ -308,4 +316,97 @@ class ProductController extends Controller
 
         return response()->json($resources);
     }
+    public function wishlistToggle($id)
+    {
+        $wishlist = session()->get('wishlist', []);
+
+        if (in_array($id, $wishlist)) {
+            // REMOVE
+            $wishlist = array_diff($wishlist, [$id]);
+            session()->put('wishlist', $wishlist);
+
+            return response()->json([
+                'status' => 'removed',
+                'count'  => count($wishlist)
+            ]);
+        } else {
+            // ADD
+            $wishlist[] = $id;
+            session()->put('wishlist', $wishlist);
+
+            return response()->json([
+                'status' => 'added',
+                'count'  => count($wishlist)
+            ]);
+        }
+    }
+
+    public function wishlistCount()
+    {
+        return response()->json([
+            'count' => count(session()->get('wishlist', []))
+        ]);
+    }
+
+    public function addToCart(Request $request)
+    {
+        $product = Product::findOrFail($request->product_id);
+
+        $cart = Cart::where('product_id', $product->id)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if ($cart) {
+            $cart->quantity += 1;
+            $cart->save();
+        } else {
+            Cart::create([
+                'product_id'  => $product->id,
+                'quantity'    => 1,
+                'offer_price' => $product->offer_price ?? $product->price,
+                'discount'    => $product->discount ?? 0,
+                'user_id'     => Auth::id(),
+                'status'      => 1
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Added to cart'
+        ]);
+    }
+
+    public function cartPanel()
+    {
+        $carts = Cart::with('product')->where('user_id', auth()->id())->get();
+
+        $total = 0;
+
+        foreach ($carts as $cart) {
+            $price = $cart->offer_price ?? $cart->product->price;
+            $total += $price * $cart->quantity;
+        }
+
+        return view('partials.cart-panel', compact('carts', 'total'));
+    }
+
+    public function toggleStatus(Request $request)
+{
+    $product = Product::find($request->id);
+
+    if (!$product) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Product not found'
+        ]);
+    }
+
+    $product->status = $product->status == 1 ? 0 : 1;
+    $product->save();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Status updated successfully'
+    ]);
+}
 }

@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
+use App\Models\Category;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,5 +24,31 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+        view()->composer('layouts.app', function ($view) {
+
+        if (Auth::check()) {
+            $carts = Cart::with('product.images')
+                ->where('user_id', Auth::id())
+                ->where('status',1)
+                ->get();
+
+            $total = $carts->sum(function ($cart) {
+                $price = $cart->offer_price ?? $cart->product->price;
+                return $price * $cart->quantity;
+            });
+            // dd($total);
+        } else {
+            $carts = collect();
+            $total = 0;
+        }
+       $categories = Category::with('subCategories')
+            ->where('status', 1)
+            ->get();    
+        $view->with([
+            'carts' => $carts,
+            'total' => $total,
+            'categories' => $categories
+        ]);
+    });
     }
 }

@@ -10,76 +10,20 @@
 
                     <!-- Filter Title -->
                     <h4 class="filter-title">Filters</h4>
-
-                    <!-- Categories -->
-                    <div class="filter-section">
-                        <div class="filter-header" onclick="toggleFilter('category')">
-                            <span>Application Area</span>
-                            <span id="category-toggle" class="toggle-arrow">▼</span>
+                    @foreach($categories as $category)
+                        <div class="filter-section">
+                            <div class="filter-header"  onclick="toggleFilter('cat-{{ $category->id }}')">
+                                <span>{{ $category->type_name }}</span>
+                                <span id="cat-{{ $category->id }}-toggle" class="toggle-arrow">▼</span>
+                            </div>
+                            <div id="cat-{{ $category->id }}-content" class="filter-content">
+                                @foreach($category->subCategories as $sub)
+                                    <label><input type="checkbox"class="category-filter" value="{{ $sub->id }}" name="categories[]"> {{ $sub->sub_category_name }}</label>
+                                @endforeach
+                                
+                            </div>
                         </div>
-                        <div id="category-content" class="filter-content">
-                            <label><input type="checkbox"> Agricultural Technology</label>
-                            <label><input type="checkbox"> Automotive and Transport</label>
-                            <label><input type="checkbox"> Building Trades</label>
-                            <label><input type="checkbox"> Electrical Installation</label>
-                            <label><input type="checkbox"> Energy</label>
-                            <label><input type="checkbox"> Food, Pharma and Cosmetics</label>
-                            <label><input type="checkbox"> Hydraulic and pneumatic</label>
-                            <label><input type="checkbox"> Maintenance</label>
-                            <label><input type="checkbox"> Maritime industry</label>
-                            <label><input type="checkbox"> Mechanical Engineering</label>
-                            <label><input type="checkbox"> Mining</label>
-                            <label><input type="checkbox"> Mould-making</label>
-                            <label><input type="checkbox"> Oil and Gas</label>
-                            <label><input type="checkbox"> Rubber and plastic industry</label>
-                            <label><input type="checkbox"> Stainless Steel</label>
-                        </div>
-                    </div>
-
-                    <!-- Brand -->
-                    <div class="filter-section">
-                        <div class="filter-header" onclick="toggleFilter('brand')">
-                            <span>KEB Automation</span>
-                            <span id="brand-toggle" class="toggle-arrow">▼</span>
-                        </div>
-                        <div id="brand-content" class="filter-content">
-                            <label><input type="checkbox"> Adhesives and Sealants</label>
-                            <label><input type="checkbox"> Technical Sprays</label>
-                            <label><input type="checkbox"> Technical Liquids</label>
-                            <label><input type="checkbox"> Accessories and Processing Aids</label>
-                            <label><input type="checkbox"> Assembly Sprays</label>
-                            <label><input type="checkbox"> High-Performance Greases</label>
-                        </div>
-                    </div>
-
-                    <!-- Brand -->
-                    <div class="filter-section">
-                        <div class="filter-header" onclick="toggleFilter('omron')">
-                            <span>Omron Automation</span>
-                            <span id="omron-toggle" class="toggle-arrow">▼</span>
-                        </div>
-                        <div id="omron-content" class="filter-content">
-                            <label><input type="checkbox"> Servo Drives And Motors</label>
-                            <label><input type="checkbox"> PLC And HMI</label>
-                            <label><input type="checkbox"> Motion Controller</label>
-                            <label><input type="checkbox"> Omron Others</label>
-                            <label><input type="checkbox"> Industrial PC</label>
-                        </div>
-                    </div>
-
-                    <!-- Brand -->
-                    <div class="filter-section">
-                        <div class="filter-header" onclick="toggleFilter('weicon')">
-                            <span>Weicon Tools</span>
-                            <span id="weicon-toggle" class="toggle-arrow">▼</span>
-                        </div>
-                        <div id="weicon-content" class="filter-content">
-                            <label><input type="checkbox"> Cable Cutters</label>
-                            <label><input type="checkbox"> Stripping Tools</label>
-                            <label><input type="checkbox"> Crimping Tools</label>
-                            <label><input type="checkbox"> Torque Tools</label>
-                        </div>
-                    </div>
+                    @endforeach
 
                     <!-- Price Filter -->
                     <div class="filter-section">
@@ -174,7 +118,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-black">SPLECA</a></li>
                         <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-black">Products</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Application Areas</li>
+                        <!-- <li class="breadcrumb-item active" aria-current="page">Application Areas</li> -->
                     </ol>
                 </nav>
 
@@ -193,139 +137,12 @@
                 </div>
 
                 <!-- PRODUCT GRID -->
-                <div class="row g-4">
-                    <!-- Repeatable Product Card -->
-                    <!-- PRODUCT 1 -->
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="product-card3">
-                            <div class="product-image-container">
-                                <span class="discount-badge">-25%</span>
-                                <div class="swiper product-image-swiper product-image-swiper-2">
-                                    <div class="swiper-wrapper">
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-2.jpg" alt="Product">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product-details">
-                                <h3 class="product-title">WEICON Pool Repair Kit</h3>
-                                <p class="product-description">cures reliably even under water | application on wet surfaces | excellent adhesion</p>
-                                <div class="price-section">
-                                    <span class="current-price">$102.91</span>
-                                    <span class="original-price">$199</span>
-                                </div>
-                                <button class="btn-cart w-100 my-1">Add to Cart</button>
-                                <button class="btn-view w-100 my-1">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="product-card3">
-                            <div class="product-image-container">
-                                <span class="discount-badge">-25%</span>
-                                <div class="swiper product-image-swiper product-image-swiper-2">
-                                    <div class="swiper-wrapper">
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-2.jpg" alt="Product">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product-details">
-                                <h3 class="product-title">WEICON Pool Repair Kit</h3>
-                                <p class="product-description">cures reliably even under water | application on wet surfaces | excellent adhesion</p>
-                                <div class="price-section">
-                                    <span class="current-price">$102.91</span>
-                                    <span class="original-price">$199</span>
-                                </div>
-                                <button class="btn-cart w-100 my-1">Add to Cart</button>
-                                <button class="btn-view w-100 my-1">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="product-card3">
-                            <div class="product-image-container">
-                                <span class="discount-badge">-25%</span>
-                                <div class="swiper product-image-swiper product-image-swiper-2">
-                                    <div class="swiper-wrapper">
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-2.jpg" alt="Product">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product-details">
-                                <h3 class="product-title">WEICON Pool Repair Kit</h3>
-                                <p class="product-description">cures reliably even under water | application on wet surfaces | excellent adhesion</p>
-                                <div class="price-section">
-                                    <span class="current-price">$102.91</span>
-                                    <span class="original-price">$199</span>
-                                </div>
-                                <button class="btn-cart w-100 my-1">Add to Cart</button>
-                                <button class="btn-view w-100 my-1">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="product-card3">
-                            <div class="product-image-container">
-                                <span class="discount-badge">-25%</span>
-                                <div class="swiper product-image-swiper product-image-swiper-2">
-                                    <div class="swiper-wrapper">
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-2.jpg" alt="Product">
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="asset/img/product/WEICON-Pool-Repair-Kit-1.jpg" alt="Product">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product-details">
-                                <h3 class="product-title">WEICON Pool Repair Kit</h3>
-                                <p class="product-description">cures reliably even under water | application on wet surfaces | excellent adhesion</p>
-                                <div class="price-section">
-                                    <span class="current-price">$102.91</span>
-                                    <span class="original-price">$199</span>
-                                </div>
-                                <button class="btn-cart w-100 my-1">Add to Cart</button>
-                                <button class="btn-view w-100 my-1">View Details</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DUPLICATE CARD (you have multiple, keeping same structure) -->
-                    <!-- ...repeat your existing cards here... -->
+                <div class="row g-4" id="product-list">
+                    <!-- Load Products -->
                 </div>
 
                 <!-- Pagination -->
-                <nav aria-label="Product pagination" class="mt-5">
+                <!-- <nav aria-label="Product pagination" class="mt-5">
                     <ul class="pagination justify-content-center spl-pagination">
                         <li class="page-item active"><a class="page-link" href="#">1</a></li>
                         <li class="page-item"><a class="page-link" href="#">2</a></li>
@@ -334,11 +151,12 @@
                         <li class="page-item"><a class="page-link" href="#">5</a></li>
                         <li class="page-item disabled"><a class="page-link" href="#">→</a></li>
                     </ul>
-                </nav>
+                </nav> -->
             </div>
         </div>
     </div>
 
+@push('scripts')
 
     <script>
         function toggleFilter(sectionName) {
@@ -348,5 +166,90 @@
             content.classList.toggle("collapsed");
             toggle.classList.toggle("rotated");
         }
-    </script>
+        function loadProducts() {
+            $.ajax({
+                url: getProducts,
+                
+            });
+        }
+const getProducts = "{{ route('getproducts') }}";
+$(document).ready(function () {
+    loadProducts();
+    $(document).on('change', '.category-filter', function () {
+        loadProducts();
+    });
+});
+function applyPriceFilter() {
+    loadProducts();
+}
+
+function loadProducts() {
+    let categories = [];
+    $('.category-filter:checked').each(function () {
+        categories.push($(this).val());
+    });
+    let minPrice = $('#minPrice').val();
+    let maxPrice = $('#maxPrice').val();
+    $.ajax({
+        url: getProducts,
+        type: "GET",
+        data: {
+            categories: categories,
+            min_price: minPrice,
+            max_price: maxPrice
+        },
+        success: function (products) {
+
+            let html = '';
+            if (products.length === 0) {
+                $('#product-list').html('<p class="text-center">No products found</p>');
+                return;
+            }
+
+            products.forEach(product => {
+
+                let images = '';
+                product.images.forEach(img => {
+                    images += `
+                        <div class="swiper-slide">
+                            <img src="public/uploads/products/${img.image}" alt="${products.name}">
+                        </div>`;
+                });
+
+                html += `
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4">
+                    <div class="product-card3">
+                        <div class="product-image-container">
+                            <span class="discount-badge">${product.discount_percent}%</span>
+                            <div class="swiper product-image-swiper  product-image-swiper-2">
+                                <div class="swiper-wrapper">
+                                    ${images}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-details">
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-description">${product.short_description ?? ''}</p>
+                            <div class="price-section">
+                                <span class="current-price">₹${product.original_price}</span>
+                                <span class="original-price">₹${product.price}</span>
+
+                            </div>
+                            <button class="btn-cart w-100 my-1 add-to-cart" data-id="${product.id}">Add to Cart</button>
+                            <button class="btn-view w-100 my-1" onclick="viewProductDetails(${product.id})">View Details</button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+
+            $('#product-list').html(html);
+        }
+    });
+}
+function viewProductDetails(productId) {
+    window.location.href = "{{ url('/product') }}/" + productId;
+}
+</script>
+@endpush
 @endsection

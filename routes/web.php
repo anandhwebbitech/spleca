@@ -6,9 +6,7 @@ use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [FrontendController::class, 'Homepage'])->name('homepage');
 Route::get('/home', [FrontendController::class, 'Homepage'])->name('homepage');
 Route::get('/about', [FrontendController::class, 'Aboutpage'])->name('aboutpage');
 Route::get('/contact', [FrontendController::class, 'Contactpage'])->name('contactpage');
@@ -17,6 +15,12 @@ Route::get('/wishlist', [FrontendController::class, 'WishlistPage'])->name('wish
 Route::get('/profile', [FrontendController::class, 'ProfilePage'])->name('profilepage');
 Route::get('/login', [FrontendController::class, 'LoginPage'])->name('loginpage');
 Route::get('/register', [FrontendController::class, 'RegisterPage'])->name('registerpage');
+Route::get('/password', [FrontendController::class, 'PasswordPage'])->name('passwordpage');
+Route::get('/productfinder', [FrontendController::class, 'ProductFinderPage'])->name('productfinderpage');
+Route::get('/applicationsandproducts', [FrontendController::class, 'ApplicationsandProductsPage'])->name('applicationsandproductspage');
+Route::get('/productsolutions', [FrontendController::class, 'ProductSolutionsPage'])->name('productsolutionspage');
+Route::get('/products', [FrontendController::class, 'ProductsPage'])->name('allproductspage');
+Route::get('/products/ajax', [FrontendController::class, 'GetProducts'])->name('getproducts');
 
 Route::get('/category', [CategoryController::class, 'CategoryPage'])->name('categorypage');
 Route::get('sub-category-fetch',[CategoryController::class, 'fetch'] )->name('categoryfetch');
@@ -39,7 +43,7 @@ Route::delete('product-delete/{id}', [ProductController::class,'destroy']);
 Route::get('/product-edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
 Route::delete('/product-image-delete/{id}', [ProductController::class, 'deleteImage']);
 
-Route::get('/product/{id}', [ProductController::class, 'show']);
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 
 
 Route::post('product-resource/store', [ProductController::class, 'ProductResourceStore'])->name('product-resource.store');
@@ -47,3 +51,17 @@ Route::get('product-resource/edit/{id}', [ProductController::class, 'ProductReso
 Route::post('product-resource/update/{id}', [ProductController::class, 'ProductResourceUpdate']);
 Route::delete('product-resource/delete/{id}', [ProductController::class, 'ProductResourceDestroy']);
 Route::get('product-resource/{product}', [ProductController::class, 'index']);
+
+// Wishlist
+Route::post('/wishlist/toggle/{id}', [ProductController::class, 'wishlistToggle'])->name('wishlist.toggle');
+Route::get('/wishlist/count', [ProductController::class, 'wishlistCount'])->name('wishlist.count');
+// Auth
+Route::middleware(['auth'])->group(function () {
+
+    Route::post('/cart/add', [ProductController::class, 'addToCart'])->name('cart.add');
+    Route::post('/address/save', [AuthController::class, 'AddressSave'])->name('address.save');
+    Route::get('/address/edit/{id}', [AuthController::class, 'AddressEdit'])->name('address.edit');
+    Route::post('/address/set-default', [AuthController::class, 'setDefault'])->name('address.setDefault');
+    Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update.custom');
+});
+Route::post('/product/status-toggle', [ProductController::class, 'toggleStatus'])->name('product.status.toggle');

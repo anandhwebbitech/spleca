@@ -60,10 +60,10 @@
                  <a class="menu-link" href="{{ route('homepage') }}">Home</a>
              </li>
              <li class="menu-item">
-                <a class="menu-link" href="{{route('categorypage')}}">Category</a>
+                 <a class="menu-link" href="{{route('categorypage')}}">Category</a>
              </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{route('productpage')}}">Product</a>
+             <li class="menu-item">
+                 <a class="menu-link" href="{{route('productpage')}}">Product</a>
              </li>
              <li class="menu-item">
                  <a class="menu-link" href="{{route('aboutpage')}}">About</a>
@@ -78,64 +78,21 @@
                          <div class="dropdown-section">
                              <h6 class="section-heading1">
                                  <i class="fa-solid fa-gear"></i>
-                                 Products
+                                 Productsddd
                              </h6>
                              <ul class="category-grid">
-                                 <li class="category-card">
-                                     <a href="#">
-                                         <i class="fas fa-chevron-right"></i> Application Areas
-                                     </a>
-                                     <ul class="subcategory-list">
-                                         <li><a href="application-area.php"><i class="fa-solid fa-circle"></i> Agricultural Technology</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Automotive and Transport</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Building Trades</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Electrical Installation</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Energy</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Food, Pharma and Cosmetics</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Hydraulic and pneumatic</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Maintenance</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Maritime industry</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Mining</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Mould-making</a></li>
-                                         <li><a href="#"><i class="fa-solid fa-circle"></i> Oil and Gas</a></li>
-                                     </ul>
-                                 </li>
-                                 <li class="category-card">
-                                     <a href="#">
-                                         <i class="fas fa-chevron-right"></i> KEB Automation
-                                     </a>
-                                     <ul class="subcategory-list">
-                                         <li><a href="#"><i class="fas fa-circle"></i> Adhesives and Sealants</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Technical Sprays</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Technical Liquids</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Accessories and Processing Aids</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Assembly Sprays</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> High-Performance Greases</a></li>
-                                     </ul>
-                                 </li>
-                                 <li class="category-card">
-                                     <a href="#">
-                                         <i class="fas fa-chevron-right"></i> Omron Automation
-                                     </a>
-                                     <ul class="subcategory-list">
-                                         <li><a href="#"><i class="fas fa-circle"></i> Servo Drives And Motors</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> PLC And HΜΙ</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Motion Controller</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Omron Others</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Industrial PC</a></li>
-                                     </ul>
-                                 </li>
-                                 <li class="category-card">
-                                     <a href="#">
-                                         <i class="fas fa-chevron-right"></i> Weicon Tools
-                                     </a>
-                                     <ul class="subcategory-list">
-                                         <li><a href="#"><i class="fas fa-circle"></i> Cable Cutters</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Stripping Tools</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Crimping Tools</a></li>
-                                         <li><a href="#"><i class="fas fa-circle"></i> Torque Tools</a></li>
-                                     </ul>
-                                 </li>
+                                @foreach($categories as $category)
+                                    <li class="category-card">
+                                        <a href="#">
+                                            <i class="fas fa-chevron-right"></i> {{ $category->type_name }}
+                                        </a>
+                                        <ul class="subcategory-list">
+                                            @foreach($category->subCategories as $sub)
+                                                <li><a  href="{{route(name: 'allproductspage')}}"><i class="fa-solid fa-circle"></i> {{ $sub->sub_category_name }}</a></li>  
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endforeach                                 
                              </ul>
                          </div>
                      </div>
@@ -155,17 +112,17 @@
                              </h6>
                              <ul class="category-grid">
                                  <li class="category-card">
-                                     <a href="product-finder.php">
+                                     <a href="{{ route(name: 'productfinderpage') }}">
                                          <i class="fas fa-search"></i> Product Finder
                                      </a>
                                  </li>
                                  <li class="category-card">
-                                     <a href="applications-and-products.php">
+                                     <a href="{{ route(name: 'applicationsandproductspage') }}">
                                          <i class="fas fa-compass"></i> Application and Products
                                      </a>
                                  </li>
                                  <li class="category-card">
-                                     <a href="product-solutions.php">
+                                     <a href="{{ route(name: 'productsolutionspage') }}">
                                          <i class="fas fa-lightbulb"></i> Product Solution
                                      </a>
                                  </li>
@@ -206,7 +163,7 @@
 
          <!-- Icons (Right) -->
          <div class="header-actions">
-             <a href="{{route('wishlistpage')}}"style="position: relative;">
+             <a href="{{route('wishlistpage')}}" style="position: relative;">
                  <i class="far fa-heart"></i>
                  <span class="notification-badge">3</span>
              </a>
@@ -214,8 +171,8 @@
              <!-- Cart Widget -->
              <a href="#" class="cart-widget" id="cartWidget">
                  <i class="fas fa-shopping-cart"></i>
-                 <span id="cartTotal">₹0.00</span>
-                 <div class="cart-badge" id="cartBadge">0</div>
+                 <span id="cartTotal">₹{{ number_format($total, 2) }}</span>
+                 <div class="cart-badge" id="cartBadge">{{count($carts)}}</div>
              </a>
 
              <!-- Cart Overlay -->
@@ -234,39 +191,59 @@
                  </div>
 
                  <div class="cart-items" id="cartItems">
-                     <div class="empty-cart">
-                         <!-- <i class="fas fa-shopping-cart"></i>
-                                <p>Your cart is empty</p> -->
-                         <div class="wb-cart-item">
 
-                             <!-- Product Image -->
-                             <img src="asset/img/product/Leak-Detection-Spray-1.jpg" class="wb-cart-img" alt="Product">
+                     @if($carts->count() > 0)
 
-                             <!-- Middle Content -->
-                             <div class="wb-cart-info">
-                                 <h4 class="wb-cart-title">Leak Detection Spray</h4>
+                     @foreach($carts as $cart)
+                     @php
+                     $price = $cart->offer_price ?? $cart->product->price;
+                     @endphp
 
-                                 <div class="wb-qty-row">
-                                     <button class="wb-qty-btn">-</button>
-                                     <span class="wb-qty-value">1</span>
-                                     <button class="wb-qty-btn">+</button>
-                                 </div>
+                     <div class="wb-cart-item">
 
-                                 <div class="wb-cart-price text-start">₹130</div>
+                         <!-- Product Image -->
+                         <img src="{{ asset('public/uploads/products/' . optional($cart->product->images->first())->image) }}"
+                             class="wb-cart-img"
+                             alt="{{ $cart->product->name }}">
+
+                         <!-- Middle Content -->
+                         <div class="wb-cart-info">
+                             <h4 class="wb-cart-title">{{ $cart->product->name }}</h4>
+
+                             <div class="wb-qty-row">
+                                 <button class="wb-qty-btn decrease" data-id="{{ $cart->id }}">-</button>
+                                 <span class="wb-qty-value">{{ $cart->quantity }}</span>
+                                 <button class="wb-qty-btn increase" data-id="{{ $cart->id }}">+</button>
                              </div>
 
-                             <!-- Remove Button -->
-                             <button class="wb-remove-btn">X</button>
+                             <div class="wb-cart-price">₹{{ number_format($price * $cart->quantity, 2) }}</div>
                          </div>
+
+                         <!-- Remove Button -->
+                         <button class="wb-remove-btn" data-id="{{ $cart->id }}">×</button>
+
                      </div>
+                     @endforeach
+
+                     @else
+                     <div class="empty-cart text-center">
+                         <i class="fas fa-shopping-cart"></i>
+                         <p>Your cart is empty</p>
+                     </div>
+                     @endif
+
                  </div>
+
 
                  <div class="cart-footer">
                      <div class="cart-total">
                          <span>Total:</span>
-                         <span class="total-amount" id="totalAmount">₹0.00</span>
+                         <span class="total-amount" id="totalAmount">
+                             ₹{{ number_format($total, 2) }}
+                         </span>
                      </div>
-                     <button class="checkout-btn" id="checkoutBtn" disabled>
+
+                     <button class="checkout-btn" {{ $carts->count() == 0 ? 'disabled' : '' }}>
                          <i class="fas fa-lock"></i> Proceed to Checkout
                      </button>
                  </div>
@@ -362,7 +339,7 @@
 
          <ul class="wb-mobile-menu">
              <li><a href="{{ route('homepage') }}"><i class="fa-solid fa-house"></i> Home</a></li>
-             <li><a  href="{{route('aboutpage')}}"><i class="fa-solid fa-circle-info"></i> About</a></li>
+             <li><a href="{{route('aboutpage')}}"><i class="fa-solid fa-circle-info"></i> About</a></li>
 
              <!-- PRODUCTS MENU -->
              <li class="wb-accordion">
@@ -372,60 +349,22 @@
                  </button>
                  <div class="wb-panel">
                      <ul>
-                         <li class="wb-accordion">
-                             <button class="wb-accordion-toggle sub" aria-expanded="false">
-                                 <a href="#" class="a-edit"><span><i class="fa-solid fa-toolbox"></i> Application Areas</span> </a>
-                                 <i class="fa-solid fa-chevron-right wb-arrow"></i>
-                             </button>
-                             <div class="wb-panel">
-                                 <ul>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Agricultural Technology</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Automotive and Transport</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Building Trades</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Electrical Installation</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Energy</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Food, Pharma and Cosmetics</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Hydraulic and pneumatic</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Maintenance</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Maritime industry</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Mining</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Mould-making</a></li>
-                                     <li><a href="#"><i class="fa-solid fa-circle"></i> Oil and Gas</a></li>
-                                 </ul>
-                             </div>
-                         </li>
+                        @foreach($categories as $category)
 
                          <li class="wb-accordion">
                              <button class="wb-accordion-toggle sub" aria-expanded="false">
-                                 <a href="#" class="a-edit"> <span><i class="fa-solid fa-industry"></i> KEB Automation</span> </a>
+                                 <a href="#" class="a-edit"><span><i class="fa-solid fa-toolbox"></i> {{ $category->type_name }}</span> </a>
                                  <i class="fa-solid fa-chevron-right wb-arrow"></i>
                              </button>
                              <div class="wb-panel">
                                  <ul>
-                                     <li><a href="#"><i class="fas fa-circle"></i> Adhesives and Sealants</a></li>
-                                     <li><a href="#"><i class="fas fa-circle"></i> Technical Sprays</a></li>
-                                     <li><a href="#"><i class="fas fa-circle"></i> Technical Liquids</a></li>
-                                     <li><a href="#"><i class="fas fa-circle"></i> Accessories and Processing Aids</a></li>
-                                     <li><a href="#"><i class="fas fa-circle"></i> Assembly Sprays</a></li>
-                                     <li><a href="#"><i class="fas fa-circle"></i> High-Performance Greases</a></li>
+                                    @foreach($category->subCategories as $sub)
+                                        <li><a href="#"><i class="fa-solid fa-circle"></i>  {{ $sub->sub_category_name }}</a></li>
+                                    @endforeach
                                  </ul>
                              </div>
                          </li>
-                         <li class="wb-accordion">
-                             <button class="wb-accordion-toggle sub" aria-expanded="false">
-                                 <a href="#" class="a-edit"> <span><i class="fa-solid fa-industry"></i> Omron Automation</span> </a>
-                                 <i class="fa-solid fa-chevron-right wb-arrow"></i>
-                             </button>
-                             <div class="wb-panel">
-                                 <ul>
-                                     <li><a href="#"><i class="fas fa-circle"></i> Servo Drives And Motors</a></li>
-                                     <li><a href="#"><i class="fas fa-circle"></i> PLC And HΜΙ</a></li>
-                                     <li><a href="#"><i class="fas fa-circle"></i> Motion Controller</a></li>
-                                     <li><a href="#"><i class="fas fa-circle"></i> Omron Others</a></li>
-                                     <li><a href="#"><i class="fas fa-circle"></i> Industrial PC</a></li>
-                                 </ul>
-                             </div>
-                         </li>
+                        @endforeach
                      </ul>
                  </div>
              </li>
@@ -439,19 +378,19 @@
                      <ul>
                          <li class="wb-accordion">
                              <button class="wb-accordion-toggle sub" aria-expanded="false">
-                                 <a href="product-finder.php" class="a-edit"> <span> Product Finder</span> </a>
+                                 <a href="{{ route(name: 'productfinderpage') }}" class="a-edit"> <span> Product Finder</span> </a>
                              </button>
                          </li>
 
                          <li class="wb-accordion">
                              <button class="wb-accordion-toggle sub" aria-expanded="false">
-                                 <a href="applications-and-products.php" class="a-edit"><span> Application And Products</span> </a>
+                                 <a href="{{ route(name: 'applicationsandproductspage') }}" class="a-edit"><span> Application And Products</span> </a>
 
                              </button>
                          </li>
                          <li class="wb-accordion">
                              <button class="wb-accordion-toggle sub" aria-expanded="false">
-                                 <a href="product-solutions.php" class="a-edit"> <span> Product Solution</span></a>
+                                 <a href="{{ route(name: 'productsolutionspage') }}" class="a-edit"> <span> Product Solution</span></a>
                              </button>
                          </li>
                      </ul>
@@ -485,4 +424,3 @@
          </div>
      </div>
  </nav>
- 
