@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\ProductResource;
@@ -16,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-
+use Razorpay\Api\Api;
 
 
 
@@ -364,6 +367,7 @@ class ProductController extends Controller
                 'product_id'  => $product->id,
                 'quantity'    => 1,
                 'offer_price' => $product->original_price ?? $product->price,
+                'original_price' => $product->price,
                 'discount'    => $product->discount_percent ?? 0,
                 'user_id'     => Auth::id(),
                 'status'      => 1
@@ -391,85 +395,262 @@ class ProductController extends Controller
     }
 
     public function toggleStatus(Request $request)
-{
-    $product = Product::find($request->id);
+    {
+        $product = Product::find($request->id);
 
-    if (!$product) {
+        if (!$product) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Product not found'
+            ]);
+        }
+
+        $product->status = $product->status == 1 ? 0 : 1;
+        $product->save();
+
         return response()->json([
-            'status' => false,
-            'message' => 'Product not found'
+            'status' => true,
+            'message' => 'Status updated successfully'
+        ]);
+    }
+    // cart
+    public function getCart()
+    {
+        $cartItems = Cart::with(['product.images'])->where('user_id', auth()->id())->where('status', 1)->get();
+        return response()->json(['status' => 'success', 'cartItems' => $cartItems]);
+    }
+    public function RemoveCart(Request $request)
+    {
+        $cart = Cart::where('id', $request->cart_id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if (!$cart) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Cart item not found'
+            ]);
+        }
+
+        $cart->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Item removed from cart'
         ]);
     }
 
-    $product->status = $product->status == 1 ? 0 : 1;
-    $product->save();
+    public function updateQuantity(Request $request)
+    {
+        $cart = Cart::with('product')
+            ->where('id', $request->cart_id)
+            ->where('user_id', auth()->id())
+            ->first();
 
-    return response()->json([
-        'status' => true,
-        'message' => 'Status updated successfully'
-    ]);
-}
-// cart
-public function getCart(){
-     $cartItems = Cart::with(['product.images'])->where('user_id', auth()->id())->where('status', 1)->get();
-    return response()->json(['status' => 'success', 'cartItems' => $cartItems]);
-}
-public function RemoveCart(Request $request)
+        if (!$cart) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Cart item not found'
+            ]);
+        }
+
+        $newQty = $cart->quantity + (int)$request->change;
+
+        if ($newQty < 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Quantity cannot be less than 1'
+            ]);
+        }
+
+        // ✅ Product selling price
+        $productPrice = $cart->product->original_price;
+
+        // ✅ Update cart
+        $cart->quantity = $newQty;
+        $cart->offer_price = $productPrice * $newQty; // 🔥 IMPORTANT
+        $cart->save();
+
+        return response()->json([
+            'status' => 'success',
+            'quantity' => $newQty,
+            'offer_price' => $cart->offer_price
+        ]);
+    }
+   public function placeOrder(Request $request)
 {
-    $cart = Cart::where('id', $request->cart_id)
-        ->where('user_id', auth()->id())
-        ->first();
+    $request->validate([
+        'address_id' => 'required|exists:customer_addresses,id'
+    ]);
 
-    if (!$cart) {
+    $userId = Auth::id();
+
+    $cartItems = Cart::with('product')
+        ->where('user_id', $userId)
+        ->get();
+
+    if ($cartItems->isEmpty()) {
         return response()->json([
             'status' => 'error',
-            'message' => 'Cart item not found'
+            'message' => 'Your cart is empty'
         ]);
     }
 
-    $cart->delete();
+    DB::beginTransaction();
 
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Item removed from cart'
-    ]);
+    try {
+        $subtotal = 0;
+        $discount = 0;
+
+        foreach ($cartItems as $item) {
+            $subtotal += $item->product->price * $item->quantity;
+             $cartdiscount = $item->discount ?? 0;
+             $discountAmount = ($item->price * $cartdiscount) / 100;
+             $discountTotal = $discountAmount * $item->quantity;
+            $discount += $discountTotal;
+        }
+
+        $tax = $subtotal * 0.18;
+        $total = $subtotal - $discount + $tax;
+
+        // Create Order
+        $order = Order::create([
+            'user_id'       => $userId,
+            'address_id'    => $request->address_id,
+            'price'         => $subtotal,
+            'discount'      => $discount,
+            'tax'           => $tax,
+            'original_price'   => $total,
+            'order_date'    => now(),
+            'delivery_date' => now()->addDays(7),
+            'status'        => 1 // Pending
+        ]);
+
+        // Create Order Items
+        foreach ($cartItems as $item) {
+            OrderItem::create([
+                'order_id'      => $order->id,
+                'product_id'    => $item->product_id,
+                'quantity'      => $item->quantity,
+                'price'         => $item->product->price,
+                'original_price'   => $item->product->price * $item->quantity,
+                'discount' => $item->discount
+            ]);
+        }
+
+        // Clear Cart
+        Cart::where('user_id', $userId)->delete();
+
+        DB::commit();
+
+        return response()->json([
+            'status' => 'success',
+            'order_id' => $order->id
+        ]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ]);
+    }
 }
 
-public function updateQuantity(Request $request)
+public function userOrders()
 {
-    $cart = Cart::with('product')
-        ->where('id', $request->cart_id)
-        ->where('user_id', auth()->id())
-        ->first();
-
-    if (!$cart) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Cart item not found'
-        ]);
-    }
-
-    $newQty = $cart->quantity + (int)$request->change;
-
-    if ($newQty < 1) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Quantity cannot be less than 1'
-        ]);
-    }
-
-    // ✅ Product selling price
-    $productPrice = $cart->product->original_price;
-
-    // ✅ Update cart
-    $cart->quantity = $newQty;
-    $cart->offer_price = $productPrice * $newQty; // 🔥 IMPORTANT
-    $cart->save();
+    $orders = OrderItem::with(['order', 'product.images'])
+        ->whereHas('order', function ($q) {
+            $q->where('user_id', auth()->id());
+        })
+        ->latest()
+        ->get()
+        ->map(function ($item) {
+            return [
+                'id'           => $item->order->id,
+                'product_name' => $item->product->name,
+                'product_id'    => $item->product->id,
+                'quantity'     => $item->quantity,
+                'price'        => $item->price,
+                'status'       => $item->order->status == 1 ? 'PENDING' : 'DELIVERED',
+                'order_date'   => $item->order->created_at->format('D M d Y'),
+                'image'        => asset('public/uploads/products/' . $item->product->images[0]->image)
+            ];
+        });
 
     return response()->json([
-        'status' => 'success',
-        'quantity' => $newQty,
-        'offer_price' => $cart->offer_price
+        'orders' => $orders
     ]);
 }
+public function ShowPay($orderId)
+{
+    $order = Order::findOrFail($orderId);
+    return view('pages.select-payment', compact('order'));
+}
+    public function cashOnDelivery($order_id)
+    {
+        $order = Order::findOrFail($order_id);
+
+        $order->update([
+            'payment_type' => 'cod',
+            'payment_status' => '1',
+            'status' => '2'
+        ]);
+
+        // return redirect("/order-success/".$order_id);
+        return redirect()->route('profilepage');
+    }
+        public function razorpayPayment($order_id)
+    {
+        $order = Order::findOrFail($order_id);
+
+        // Validate that the order total is greater than 0
+        if ($order->original_price <= 0) {
+            return redirect()->back()->with('error', 'Order total must be greater than 0');
+        }
+
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+        // Create Razorpay order
+        $razorOrder = $api->order->create([
+            'receipt' => 'ORDER_' . $order->id, // convert to string with prefix
+            'amount' => $order->original_price * 100,  // amount in paise
+            'currency' => 'INR'
+        ]);
+        return view('pages.razorpay_payment', [
+            'order' => $order,
+            'rOrder' => $razorOrder
+        ]);
+    }
+    public function savePayment(Request $request)
+{
+    try {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'razorpay_payment_id' => 'required',
+            'razorpay_order_id' => 'required',
+            'razorpay_signature' => 'required',
+            'amount' => 'required|numeric'
+        ]);
+
+        $payment = Payment::create([
+            'order_id' => $request->order_id,
+            'razorpay_payment_id' => $request->razorpay_payment_id,
+            'razorpay_order_id' => $request->razorpay_order_id,
+            'razorpay_signature' => $request->razorpay_signature,
+            'amount' => $request->amount,
+            'status' => 'completed'
+        ]);
+
+        return response()->json(['status' => 'success', 'payment_id' => $payment->id]);
+    } catch (\Exception $e) {
+        // Return JSON with error message
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
+
 }

@@ -123,6 +123,7 @@
                     showConfirmButton: false,
                     timer: 1500
                 });
+                window.location.href = "{{ route('cartpage') }}";
             },
             error: function(xhr) {
                 if (xhr.status === 401) {
@@ -150,53 +151,7 @@
             }
         });
     });
-$(document).on('click', '.add-to-cart', function(e) {
-         e.preventDefault();
 
-         let productId = $(this).data('id');
-
-         $.ajax({
-             url: "{{ route('cart.add') }}",
-             type: "POST",
-             data: {
-                 product_id: productId,
-                 _token: "{{ csrf_token() }}"
-             },
-             success: function(response) {
-                 Swal.fire({
-                     icon: 'success',
-                     title: 'Added to Cart',
-                     text: 'Product added to cart successfully!',
-                     showConfirmButton: false,
-                     timer: 1500
-                 });
-             },
-             error: function(xhr) {
-                 if (xhr.status === 401) {
-                     Swal.fire({
-                         icon: 'info',
-                         title: 'Login Required',
-                         text: 'Please login to continue shopping.',
-                         showCancelButton: true,
-                         confirmButtonText: 'Login',
-                         cancelButtonText: 'Close',
-                         reverseButtons: true
-                     }).then((result) => {
-                         if (result.isConfirmed) {
-                             // ✅ Go to login page
-                             window.location.href = "{{ route('login') }}";
-                         }
-                     });
-                 } else {
-                     Swal.fire({
-                         icon: 'error',
-                         title: 'Error',
-                         text: 'Unable to add product to cart!',
-                     });
-                 }
-             }
-         });
-     });
      function removeFromWishlist(id) {
         let productId = id;
 

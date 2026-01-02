@@ -10,7 +10,7 @@ class Order extends Model
     protected $guarded = [];
     public function user()
     {
-        return $this->hasMany(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
     public function product()
     {
@@ -20,5 +20,9 @@ class Order extends Model
     {
         return $this->belongsTo(CustomerAddress::class, 'address_id');
     }
-
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+    
 }

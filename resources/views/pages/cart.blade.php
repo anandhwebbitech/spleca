@@ -50,7 +50,7 @@
                      <i class="fas fa-lock me-2"></i>Proceed to Checkout
                  </button>
 
-                 <button class="continue-shopping-btn" onclick="backToShop()">
+                 <button class="continue-shopping-btn"  onclick="window.location.href='{{ route('allproductspage') }}'">
                      <i class="fas fa-arrow-left me-2"></i>Continue Shopping
                  </button>
 
@@ -90,7 +90,7 @@
                             <i class="fas fa-shopping-cart"></i>
                             <h3>Your cart is empty</h3>
                             <p>Add some amazing products to your cart and they will show up here</p>
-                            <button class="checkout-primary-btn" onclick="backToShop()">Start Shopping</button>
+                            <button class="checkout-primary-btn"  onclick="window.location.href='{{ route('allproductspage') }}'">Start Shopping</button>
                         </div>
                     `);
                      updateSummary(0, 0,0);
@@ -244,6 +244,9 @@
             alert('Something went wrong!');
         }
     });
+}
+function proceedCheckout() {
+    window.location.href = "{{ route('checkoutpage') }}";
 }
  </script>
  @endpush

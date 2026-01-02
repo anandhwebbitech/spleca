@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\CustomerAddress;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class FrontendController extends Controller
 {
@@ -17,9 +19,37 @@ class FrontendController extends Controller
     {
         return view("pages.about");
     }
-      public function Cartpage()
+    public function Cartpage()
     {
         return view("pages.cart");
+    }
+    public function CheckoutPage()
+    {
+       $cartItems = Cart::with('product.images')
+            ->where('user_id', Auth::id())
+            ->get();
+
+        $subtotal = 0;
+        $discountTotal = 0;
+
+        foreach ($cartItems as $item) {
+            $price = $item->product->price;
+            $discount = $item->discount ?? 0;
+
+            $discountAmount = ($price * $discount) / 100;
+            $subtotal += $price * $item->quantity;
+            $discountTotal += $discountAmount * $item->quantity;
+        }
+
+        $gst = ($subtotal - $discountTotal) * 0.18;
+        $total = ($subtotal - $discountTotal) + $gst;
+        return view("pages.checkout", compact(
+            'cartItems',
+            'subtotal',
+            'discountTotal',
+            'gst',
+            'total'
+        ));
     }
     public function HomePage()
     {
@@ -220,4 +250,18 @@ class FrontendController extends Controller
             'count' => count($wishlist)
         ]);
     }
+    public function getAddresses()
+    {
+        $addresses = CustomerAddress::where('user_id', Auth::id())
+            ->where('status', 1)
+            ->orderByDesc('is_default')
+            ->get();
+
+        return response()->json([
+            'addresses' => $addresses
+        ]);
+    }
+
+
+
 }

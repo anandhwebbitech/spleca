@@ -64,10 +64,21 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update.custom');
     Route::get('/wishlist', [FrontendController::class, 'WishlistPage'])->name('wishlistpage');
     Route::get('/cart', [FrontendController::class, 'Cartpage'])->name('cartpage');
+    Route::get('/checkout', [FrontendController::class, 'CheckoutPage'])->name('checkoutpage');
     Route::get('/wishlist-data', [FrontendController::class, 'getWishlist'])->name('get.wishlist');
     Route::get('/cart-data', [ProductController::class, 'getCart'])->name('get.cart');
     Route::post('/cart/remove', [ProductController::class, 'RemoveCart'])->name('cart.remove');
     Route::post('/cart/update-qty', [ProductController::class, 'updateQuantity'])->name('cart.update.qty');
+    Route::post('/checkout/place-order', [ProductController::class, 'placeOrder'])->name('checkout.place');
+    Route::get('/checkout/addresses', [FrontendController::class, 'getAddresses'])->name('checkout.addresses');
+    Route::get('/my-orders', [ProductController::class, 'userOrders'])->name('user.orders');
+    Route::get('/select-payment/{order}', [ProductController::class, 'ShowPay'])->name('select-payment');
+
+    Route::get('/payment/cod/{order_id}', [ProductController::class, 'cashOnDelivery']);
+    Route::get('/payment/razorpay/{order_id}', [ProductController::class, 'razorpayPayment']);
+    Route::post('/payment/save', [ProductController::class, 'savePayment'])->name('payment.save');
+
+
 });
 Route::post('/product/status-toggle', [ProductController::class, 'toggleStatus'])->name('product.status.toggle');
 Route::get('/toggle-wishlist/{id}', [FrontendController::class, 'toggleWishlist'])->name('toggle-wishlist');

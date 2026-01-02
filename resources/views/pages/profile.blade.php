@@ -315,31 +315,7 @@
              <div id="orders-page" class="content-page" style="display: none;">
                  <h1 class="section-title">Orders</h1>
                  <p class="mb-4">Your recent orders:</p>
-
-                 <div class="info-card">
-                     <div class="row align-items-start">
-                         <div class="col-md-3 mb-3 mb-md-0">
-                             <img src="{{ asset('asset/img/product/Leak-Detection-Spray-1.jpg')}}" alt="Bluetooth Speaker" class="img-fluid rounded" style="max-width: 150px;">
-                         </div>
-                         <div class="col-md-5">
-                             <h5 class="mb-2">Bluetooth Speaker</h5>
-                             <p class="mb-1"><strong>Order ID:</strong> ORD1022</p>
-                             <p class="mb-1"><strong>Date:</strong> November 21, 2025</p>
-                             <p class="mb-1"><strong>Quantity:</strong> 1</p>
-                         </div>
-                         <div class="col-md-4 text-md-end">
-                             <p class="mb-2"><strong>$1,299</strong></p>
-                             <span class="badge bg-success">Delivered</span>
-                         </div>
-                     </div>
-                     <hr class="my-3">
-                     <button class="btn btn-outline-primary btn-sm">View Details</button>
-                 </div>
-
-                 <!-- <div class="alert alert-warning d-flex align-items-center" role="alert">
-                        <i class="fas fa-exclamation-triangle me-3"></i>
-                        <div>You have not ordered yet.</div>
-                    </div> -->
+                <div class="row"  id="ordersContainer"></div>
              </div>
          </div>
      </div>
@@ -348,6 +324,7 @@
 
  <script>
      $(document).ready(function() {
+        loadOrders();
          const countryApi = "https://countriesnow.space/api/v0.1/countries/positions";
          const stateApi = "https://countriesnow.space/api/v0.1/countries/states";
          const cityApi = "https://countriesnow.space/api/v0.1/countries/state/cities";
@@ -578,6 +555,55 @@
              }
          });
      });
+    function loadOrders() {
+        const productBaseUrl = "{{ url('/product') }}";
+    $.ajax({
+        url: "{{ route('user.orders') }}",
+        type: "GET",
+        success: function (response) {
+            let html = '';
+
+            if (response.orders.length === 0) {
+                html = `<p class="text-muted">No orders found</p>`;
+            }
+
+            $.each(response.orders, function (index, order) {
+                html += `
+                <div class="col-md-6 mb-4">
+                    <div class="info-card p-3 h-100">
+                        <div class="row">
+                            <div class="col-4">
+                                <img src="${order.image}" 
+                                     class="img-fluid rounded"
+                                     style="max-width:120px">
+                            </div>
+
+                            <div class="col-8">
+                                <h5>${order.product_name}</h5>
+                                <p class="mb-1"><strong>Order ID:</strong> ORD${order.id}</p>
+                                <p class="mb-1"><strong>Date:</strong> ${order.order_date}</p>
+                                <p class="mb-1"><strong>Quantity:</strong> ${order.quantity}</p>
+
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <strong>₹${order.price}</strong>
+                                    <span class="badge bg-warning">${order.status}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <a  href="${productBaseUrl}/${order.product_id}"
+                           class="btn btn-outline-primary btn-sm">
+                           View Details
+                        </a>
+                    </div>
+                </div>`;
+            });
+
+            $('#ordersContainer').html(html);
+        }
+    });
+}
  </script>
  @endpush
 
