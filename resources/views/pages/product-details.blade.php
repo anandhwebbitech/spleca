@@ -111,18 +111,25 @@
                              <button class="btn-buy">Buy Now</button>
                              <button class="btn-cart1 add-to-cart" data-id="{{ $product->id }}">Add to Cart</button>
                          </div>
-
                          <!-- <div class="action-links">
-                             <a href="#" class="action-link">
-                                 <i class="far fa-heart"></i>
-                                 <span>Add to Wishlist</span>
-                         </div> -->
-                         <div class="action-links">
                              <button type="button"
-                                 class="action-link add-to-wishlist"
+                                 class="action-link addToWishlist "
                                  data-id="{{ $product->id }}">
                                  <i class="{{ $inWishlist ? 'fas fa-heart text-danger' : 'far fa-heart' }}"></i>
                                  <span>Add to Wishlist</span>
+                             </button>
+                         </div> -->
+                         <div class="action-links">
+                             <button type="button"
+                                 class="action-link addToWishlist"
+                                 data-id="{{ $product->id }}"
+                                 data-action="{{ $inWishlist ? 'remove' : 'add' }}">
+
+                                 <i class="{{ $inWishlist ? 'fas fa-heart text-danger' : 'far fa-heart' }}"></i>
+
+                                 <span>
+                                     {{ $inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist' }}
+                                 </span>
                              </button>
                          </div>
                          <a href="#" class="action-link">
@@ -248,10 +255,10 @@
                                      width="100%"
                                      height="220"
                                      src="{{ preg_replace(
-                    '~^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)~',
-                    'https://www.youtube.com/embed/',
-                    $v->video_url
-                ) }}"
+                                            '~^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)~',
+                                            'https://www.youtube.com/embed/',
+                                            $v->video_url
+                                        ) }}"
                                      title="{{ $v->title ?? 'Product Video' }}"
                                      frameborder="0"
                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -346,50 +353,7 @@
              });
 
          /* Toggle wishlist */
-         document.querySelectorAll('.add-to-wishlist').forEach(button => {
-
-             button.addEventListener('click', function(e) {
-                 e.preventDefault();
-                 e.stopPropagation();
-
-                 const productId = this.dataset.id;
-                 const icon = this.querySelector('i');
-
-                 // Disable button while request is processing
-                 if (this.classList.contains('loading')) return;
-                 this.classList.add('loading');
-
-                 fetch("{{ route('wishlist.toggle', ':id') }}".replace(':id', productId), {
-                         method: 'POST',
-                         headers: {
-                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                             'Accept': 'application/json'
-                         }
-                     })
-                     .then(res => res.json())
-                     .then(data => {
-
-                         document.getElementById('wishlist-count').innerText = data.count;
-
-                         if (data.status === 'added') {
-                             icon.classList.remove('far');
-                             icon.classList.add('fas', 'text-danger');
-                         } else if (data.status === 'removed') {
-                             icon.classList.remove('fas', 'text-danger');
-                             icon.classList.add('far');
-                         }
-
-                     })
-                     .catch(err => console.error(err))
-                     .finally(() => {
-                         this.classList.remove('loading');
-                     });
-             });
-
-         });
-
      });
-     
  </script>
  @endpush
 

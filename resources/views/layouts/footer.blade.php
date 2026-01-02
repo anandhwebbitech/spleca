@@ -152,4 +152,51 @@ $(document).on('click', '.add-to-cart', function(e) {
              }
          });
      });
+     function removeFromWishlist(id) {
+        let productId = id;
+
+        // Correct: use url() + JS dynamic ID
+        let toggleUrl = "{{ url('toggle-wishlist') }}/" + encodeURIComponent(productId);
+
+        $.ajax({
+            type: "GET",
+            url: toggleUrl,
+            success: function(response) {
+                // Optional: update wishlist count
+                $(".wishlist-link .badge").text(response.count);
+                $(".wish-count").text(response.count);
+                // Optional toast message
+                loadWishlist(); // ✅ reload AFTER success
+            },
+            error: function(err) {
+                console.error("Wishlist Error:", err);
+            }
+        });
+    }
+    $(document).on("click", ".addToWishlist", function() {
+        let productId = $(this).data("id");
+        let btn = $(this);
+
+        // Correct: use url() + JS dynamic ID
+        let toggleUrl = "{{ url('toggle-wishlist') }}/" + encodeURIComponent(productId);
+
+        $.ajax({
+            type: "GET",
+            url: toggleUrl,
+            success: function(response) {
+                if (response.added) {
+                    btn.addClass("active"); // heart filled
+                } else {
+                    btn.removeClass("active"); // heart empty
+                }
+                location.reload();
+                // Optional: update wishlist count
+                $(".wishlist-link .badge").text(response.count);
+                // loadWishlist(); // ✅ reload AFTER success
+            },
+            error: function(err) {
+                console.error("Wishlist Error:", err);
+            }
+        });
+    });
 </script>
