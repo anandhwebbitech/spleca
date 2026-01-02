@@ -198,8 +198,9 @@ function loadProducts() {
             min_price: minPrice,
             max_price: maxPrice
         },
-        success: function (products) {
-
+        success: function (response) {
+            let products = response.products;
+            let wishlist = response.wishlist || [];
             let html = '';
             if (products.length === 0) {
                 $('#product-list').html('<p class="text-center">No products found</p>');

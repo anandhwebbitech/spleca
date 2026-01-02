@@ -9,6 +9,7 @@ use App\Models\CustomerAddress;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class FrontendController extends Controller
 {
     //
@@ -85,7 +86,6 @@ class FrontendController extends Controller
         return view('pages.application-area', compact('categories'));
         // return view('pages.application-area');
     }
-
     // Loads
     public function login(Request $request)
     {
@@ -110,57 +110,114 @@ class FrontendController extends Controller
     }
 
     public function filterProducts(Request $request)
-{
-    $products = Product::with('images')
-        ->where('status', 1);
+    {
+        $products = Product::with('images')
+            ->where('status', 1);
 
-    // 🔹 Sub Category Filter
-    if ($request->subcategories) {
-        $products->whereIn('sub_category_id', $request->subcategories);
+        // 🔹 Sub Category Filter
+        if ($request->subcategories) {
+            $products->whereIn('sub_category_id', $request->subcategories);
+        }
+
+        // 🔹 Price Filter
+        if ($request->min_price) {
+            $products->where('price', '>=', $request->min_price);
+        }
+
+        if ($request->max_price) {
+            $products->where('price', '<=', $request->max_price);
+        }
+
+        // 🔹 Sorting
+        if ($request->sort == 'price-low') {
+            $products->orderBy('price', 'asc');
+        } elseif ($request->sort == 'price-high') {
+            $products->orderBy('price', 'desc');
+        } elseif ($request->sort == 'latest') {
+            $products->latest();
+        }
+
+        $products = $products->paginate(9);
+
+        return view('pages.application-area', compact('products'))->render();
     }
 
-    // 🔹 Price Filter
-    if ($request->min_price) {
-        $products->where('price', '>=', $request->min_price);
+    public function GetProducts(Request $request)
+    {
+        $query = Product::with('images')
+            ->where('status', 1);
+
+        // Filter by selected sub-categories
+        if ($request->filled('categories')) {
+            $query->whereIn('category_id', $request->categories);
+        }
+        // Price filter
+        if ($request->filled('min_price')) {
+            $query->where('original_price', '>=', $request->min_price);
+        }
+
+        if ($request->filled('max_price')) {
+            $query->where('original_price', '<=', $request->max_price);
+        }
+        $wishlist = session()->get('wishlist', []);
+        $wishlistIds = array_keys($wishlist);
+
+        $products = $query->latest()->get();
+        return response()->json([
+            'products' => $products,
+            'wishlist' => $wishlistIds
+
+        ]);
+        // return response()->json($query->latest()->get());
     }
 
-    if ($request->max_price) {
-        $products->where('price', '<=', $request->max_price);
+    public function toggleWishlist($id)
+    {
+        $product = Product::with('images')->find($id);
+
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        $wishlist = session()->get('wishlist', []);
+
+        if (isset($wishlist[$id])) {
+            unset($wishlist[$id]);
+            $added = false;
+        } else {
+            $image = $product->images->first()
+            ? $product->images->first()->image
+            : null;
+
+            $wishlist[$id] = [
+                "product_name" => $product->name,
+                "id"           => $product->id,
+                "quantity"     => 1,
+                "offer_price"  => $product->original_price,
+                "price"  => $product->price,
+                "product_img"  => $image,
+                "discount_percent" =>$product->discount_percent,
+                "short_description" => $product->short_description,
+                "user_id"       => auth()->id()
+            ];
+            $added = true;
+        }
+
+        session()->put('wishlist', $wishlist);
+
+        return response()->json([
+            'message' => $added ? 'Added to wishlist' : 'Removed from wishlist',
+            'count' => count($wishlist),
+            'added' => $added
+        ]);
     }
-
-    // 🔹 Sorting
-    if ($request->sort == 'price-low') {
-        $products->orderBy('price', 'asc');
-    } elseif ($request->sort == 'price-high') {
-        $products->orderBy('price', 'desc');
-    } elseif ($request->sort == 'latest') {
-        $products->latest();
+    public function getWishlist()
+    {
+        $wishlist = session()->get('wishlist', []);
+        // dd($wishlist);
+        return response()->json([
+            'items' => $wishlist,
+            'count' => count($wishlist)
+        ]);
     }
-
-    $products = $products->paginate(9);
-
-    return view('pages.application-area', compact('products'))->render();
-}
-
-public function GetProducts(Request $request)
-{
-    $query = Product::with('images')
-        ->where('status', 1);
-
-    // Filter by selected sub-categories
-    if ($request->filled('categories')) {
-        $query->whereIn('category_id', $request->categories);
-    }
-    // Price filter
-    if ($request->filled('min_price')) {
-        $query->where('original_price', '>=', $request->min_price);
-    }
-
-    if ($request->filled('max_price')) {
-        $query->where('original_price', '<=', $request->max_price);
-    }
-
-    return response()->json($query->latest()->get());
-}
-
 }

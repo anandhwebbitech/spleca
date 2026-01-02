@@ -11,7 +11,6 @@ Route::get('/home', [FrontendController::class, 'Homepage'])->name('homepage');
 Route::get('/about', [FrontendController::class, 'Aboutpage'])->name('aboutpage');
 Route::get('/contact', [FrontendController::class, 'Contactpage'])->name('contactpage');
 Route::get('/newsletter', [FrontendController::class, 'Newsletterpage'])->name('newsletterpage');
-Route::get('/wishlist', [FrontendController::class, 'WishlistPage'])->name('wishlistpage');
 Route::get('/profile', [FrontendController::class, 'ProfilePage'])->name('profilepage');
 Route::get('/login', [FrontendController::class, 'LoginPage'])->name('loginpage');
 Route::get('/register', [FrontendController::class, 'RegisterPage'])->name('registerpage');
@@ -63,6 +62,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/address/edit/{id}', [AuthController::class, 'AddressEdit'])->name('address.edit');
     Route::post('/address/set-default', [AuthController::class, 'setDefault'])->name('address.setDefault');
     Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update.custom');
+    Route::get('/wishlist', [FrontendController::class, 'WishlistPage'])->name('wishlistpage');
 });
 Route::post('/product/status-toggle', [ProductController::class, 'toggleStatus'])->name('product.status.toggle');
+Route::get('/toggle-wishlist/{id}', [FrontendController::class, 'toggleWishlist'])->name('toggle-wishlist');
+Route::get('/wishlist-data', [FrontendController::class, 'getWishlist'])->name('get.wishlist');
 Route::get('/cart', [FrontendController::class, 'Cartpage'])->name('cartpage');

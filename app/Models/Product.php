@@ -10,8 +10,8 @@ class Product extends Model
     protected $guarded = [];
 
     public function images() {
-    return $this->hasMany(ProductImage::class);
-}
+        return $this->hasMany(ProductImage::class);
+    }
 
 public function features() {
     return $this->hasMany(ProductFeature::class);

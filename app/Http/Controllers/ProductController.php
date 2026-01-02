@@ -172,8 +172,8 @@ class ProductController extends Controller
             'resources'
         ])->findOrFail($id);
         $wishlist = session()->get('wishlist', []);
-        $inWishlist = in_array($product->id, $wishlist);
-
+        $wishlistIds = array_keys($wishlist);
+        $inWishlist = in_array($product->id, $wishlistIds);
         return view('pages.product-details', compact('product', 'inWishlist'));
     }
     // 
