@@ -65,3 +65,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update.custom');
 });
 Route::post('/product/status-toggle', [ProductController::class, 'toggleStatus'])->name('product.status.toggle');
+Route::get('/cart', [FrontendController::class, 'Cartpage'])->name('cartpage');

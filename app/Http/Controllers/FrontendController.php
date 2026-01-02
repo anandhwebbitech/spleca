@@ -16,6 +16,10 @@ class FrontendController extends Controller
     {
         return view("pages.about");
     }
+      public function Cartpage()
+    {
+        return view("pages.cart");
+    }
     public function HomePage()
     {
         $featuredProducts = Product::with('images')
