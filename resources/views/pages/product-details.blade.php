@@ -108,7 +108,7 @@
 
 
                          <div class="button-group">
-                             <button class="btn-buy">Buy Now</button>
+                             <button class="btn-buy add-to-cart" data-id="{{ $product->id }}">Buy Now</button>
                              <button class="btn-cart1 add-to-cart" data-id="{{ $product->id }}">Add to Cart</button>
                          </div>
                          <!-- <div class="action-links">

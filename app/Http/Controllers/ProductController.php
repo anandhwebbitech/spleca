@@ -562,7 +562,7 @@ public function userOrders()
 {
     $orders = OrderItem::with(['order', 'product.images'])
         ->whereHas('order', function ($q) {
-            $q->where('user_id', auth()->id());
+            $q->where('user_id', auth()->id())->where('status',2);
         })
         ->latest()
         ->get()
@@ -573,7 +573,7 @@ public function userOrders()
                 'product_id'    => $item->product->id,
                 'quantity'     => $item->quantity,
                 'price'        => $item->price,
-                'status'       => $item->order->status == 1 ? 'PENDING' : 'DELIVERED',
+                'status'       => $item->order->status == 3 ? 'DELIVERED' : 'PENDING',
                 'order_date'   => $item->order->created_at->format('D M d Y'),
                 'image'        => asset('public/uploads/products/' . $item->product->images[0]->image)
             ];

@@ -164,6 +164,7 @@
             success: function(response) {
                 // Optional: update wishlist count
                 $(".wishlist-link .badge").text(response.count);
+                $(".notification-badge").text(response.count);
                 $(".wish-count").text(response.count);
                 // Optional toast message
                 loadWishlist(); // ✅ reload AFTER success
@@ -192,7 +193,9 @@
                 location.reload();
                 // Optional: update wishlist count
                 $(".wishlist-link .badge").text(response.count);
-                // loadWishlist(); // ✅ reload AFTER success
+                $(".notification-badge").text(response.count);
+                
+                loadWishlist(); // ✅ reload AFTER success
             },
             error: function(err) {
                 console.error("Wishlist Error:", err);

@@ -36,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
                 $price = $cart->offer_price ?? $cart->product->price;
                 return $price * $cart->quantity;
             });
+            $wishlist = session()->get('wishlist', []); // get wishlist array from session
+            $wishlistCount = count($wishlist); // get number of items
             // dd($total);
         } else {
             $carts = collect();
@@ -47,7 +49,8 @@ class AppServiceProvider extends ServiceProvider
         $view->with([
             'carts' => $carts,
             'total' => $total,
-            'categories' => $categories
+            'categories' => $categories,
+            'wishlistCount' =>$wishlistCount
         ]);
     });
     }

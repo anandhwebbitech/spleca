@@ -165,18 +165,17 @@
          <div class="header-actions">
              <a href="{{route('wishlistpage')}}" style="position: relative;">
                  <i class="far fa-heart"></i>
-                 <span class="notification-badge">3</span>
+                 <span class="notification-badge">{{  $wishlistCount }}</span>
              </a>
-             <a href="{{route('cartpage')}}" style="position: relative;">
+             <!-- <a href="{{route('cartpage')}}" style="position: relative;">
                  <i class="fas fa-shopping-cart"></i>
                  <span class="notification-badge">3</span>
-             </a>
+             </a> -->
              <a href="{{ route('profilepage') }}"><i class="far fa-user"></i></a>
              <!-- Cart Widget -->
-             <a href="#" class="cart-widget" id="cartWidget">
+             <a  href="{{route('cartpage')}}"  class="cart-widget" id="cartWidget">
                  <i class="fas fa-shopping-cart"></i>
                  <span id="cartTotal">₹{{ number_format($total, 2) }}</span>
-                 <div class="cart-badge" id="cartBadge">{{count($carts)}}</div>
              </a>
 
              <!-- Cart Overlay -->

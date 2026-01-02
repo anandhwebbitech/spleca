@@ -179,55 +179,55 @@
         const totalAmount = document.getElementById('totalAmount');
         const checkoutBtn = document.getElementById('checkoutBtn');
 
-        function openCart() {
-            if (!cartPanel || !cartOverlay) return;
-            cartPanel.classList.add('active');
-            cartOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+        // function openCart() {
+        //     if (!cartPanel || !cartOverlay) return;
+        //     cartPanel.classList.add('active');
+        //     cartOverlay.classList.add('active');
+        //     document.body.style.overflow = 'hidden';
+        // }
 
-        function closeCartPanel() {
-            if (!cartPanel || !cartOverlay) return;
-            cartPanel.classList.remove('active');
-            cartOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
+        // function closeCartPanel() {
+        //     if (!cartPanel || !cartOverlay) return;
+        //     cartPanel.classList.remove('active');
+        //     cartOverlay.classList.remove('active');
+        //     document.body.style.overflow = '';
+        // }
 
-        cartWidget?.addEventListener('click', e => {
-            e.preventDefault();
-            openCart();
-        });
+        // cartWidget?.addEventListener('click', e => {
+        //     e.preventDefault();
+        //     openCart();
+        // });
 
-        closeCart?.addEventListener('click', closeCartPanel);
-        cartOverlay?.addEventListener('click', closeCartPanel);
+        // closeCart?.addEventListener('click', closeCartPanel);
+        // cartOverlay?.addEventListener('click', closeCartPanel);
 
-        window.updateCart = function () {
-            if (!cartBadge || !cartItems || !cartTotal || !totalAmount) return;
+        // window.updateCart = function () {
+        //     if (!cartBadge || !cartItems || !cartTotal || !totalAmount) return;
 
-            const totalItems = cart.reduce((s, i) => s + i.qty, 0);
-            const totalPrice = cart.reduce((s, i) => s + i.qty * i.price, 0);
+        //     const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+        //     const totalPrice = cart.reduce((s, i) => s + i.qty * i.price, 0);
 
-            cartBadge.textContent = totalItems;
-            cartTotal.textContent = `₹${totalPrice.toFixed(2)}`;
-            totalAmount.textContent = `₹${totalPrice.toFixed(2)}`;
+        //     cartBadge.textContent = totalItems;
+        //     cartTotal.textContent = `₹${totalPrice.toFixed(2)}`;
+        //     totalAmount.textContent = `₹${totalPrice.toFixed(2)}`;
 
-            if (!cart.length) {
-                cartItems.innerHTML = `<p class="text-center">Your cart is empty</p>`;
-                checkoutBtn && (checkoutBtn.disabled = true);
-            } else {
-                cartItems.innerHTML = cart.map(item => `
-                    <div class="cart-item">
-                        <strong>${item.name}</strong>
-                        <span>₹${item.price}</span>
-                    </div>
-                `).join('');
-                checkoutBtn && (checkoutBtn.disabled = false);
-            }
-        };
+        //     if (!cart.length) {
+        //         cartItems.innerHTML = `<p class="text-center">Your cart is empty</p>`;
+        //         checkoutBtn && (checkoutBtn.disabled = true);
+        //     } else {
+        //         cartItems.innerHTML = cart.map(item => `
+        //             <div class="cart-item">
+        //                 <strong>${item.name}</strong>
+        //                 <span>₹${item.price}</span>
+        //             </div>
+        //         `).join('');
+        //         checkoutBtn && (checkoutBtn.disabled = false);
+        //     }
+        // };
 
-        checkoutBtn?.addEventListener('click', () => {
-            alert("Proceeding to checkout");
-        });
+        // checkoutBtn?.addEventListener('click', () => {
+        //     alert("Proceeding to checkout");
+        // });
 
         /* ================== MOBILE MENU ================== */
         const mobileNav = document.getElementById('wb-mobile-nav');
