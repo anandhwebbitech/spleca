@@ -363,8 +363,8 @@ class ProductController extends Controller
             Cart::create([
                 'product_id'  => $product->id,
                 'quantity'    => 1,
-                'offer_price' => $product->offer_price ?? $product->price,
-                'discount'    => $product->discount ?? 0,
+                'offer_price' => $product->original_price ?? $product->price,
+                'discount'    => $product->discount_percent ?? 0,
                 'user_id'     => Auth::id(),
                 'status'      => 1
             ]);
@@ -407,6 +407,69 @@ class ProductController extends Controller
     return response()->json([
         'status' => true,
         'message' => 'Status updated successfully'
+    ]);
+}
+// cart
+public function getCart(){
+     $cartItems = Cart::with(['product.images'])->where('user_id', auth()->id())->where('status', 1)->get();
+    return response()->json(['status' => 'success', 'cartItems' => $cartItems]);
+}
+public function RemoveCart(Request $request)
+{
+    $cart = Cart::where('id', $request->cart_id)
+        ->where('user_id', auth()->id())
+        ->first();
+
+    if (!$cart) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Cart item not found'
+        ]);
+    }
+
+    $cart->delete();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Item removed from cart'
+    ]);
+}
+
+public function updateQuantity(Request $request)
+{
+    $cart = Cart::with('product')
+        ->where('id', $request->cart_id)
+        ->where('user_id', auth()->id())
+        ->first();
+
+    if (!$cart) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Cart item not found'
+        ]);
+    }
+
+    $newQty = $cart->quantity + (int)$request->change;
+
+    if ($newQty < 1) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Quantity cannot be less than 1'
+        ]);
+    }
+
+    // ✅ Product selling price
+    $productPrice = $cart->product->original_price;
+
+    // ✅ Update cart
+    $cart->quantity = $newQty;
+    $cart->offer_price = $productPrice * $newQty; // 🔥 IMPORTANT
+    $cart->save();
+
+    return response()->json([
+        'status' => 'success',
+        'quantity' => $newQty,
+        'offer_price' => $cart->offer_price
     ]);
 }
 }

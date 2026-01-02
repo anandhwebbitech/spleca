@@ -63,8 +63,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/address/set-default', [AuthController::class, 'setDefault'])->name('address.setDefault');
     Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update.custom');
     Route::get('/wishlist', [FrontendController::class, 'WishlistPage'])->name('wishlistpage');
+    Route::get('/cart', [FrontendController::class, 'Cartpage'])->name('cartpage');
+    Route::get('/wishlist-data', [FrontendController::class, 'getWishlist'])->name('get.wishlist');
+    Route::get('/cart-data', [ProductController::class, 'getCart'])->name('get.cart');
+    Route::post('/cart/remove', [ProductController::class, 'RemoveCart'])->name('cart.remove');
+    Route::post('/cart/update-qty', [ProductController::class, 'updateQuantity'])->name('cart.update.qty');
 });
 Route::post('/product/status-toggle', [ProductController::class, 'toggleStatus'])->name('product.status.toggle');
 Route::get('/toggle-wishlist/{id}', [FrontendController::class, 'toggleWishlist'])->name('toggle-wishlist');
-Route::get('/wishlist-data', [FrontendController::class, 'getWishlist'])->name('get.wishlist');
-Route::get('/cart', [FrontendController::class, 'Cartpage'])->name('cartpage');
