@@ -167,6 +167,10 @@
                  <i class="far fa-heart"></i>
                  <span class="notification-badge">3</span>
              </a>
+             <a href="{{route('cartpage')}}" style="position: relative;">
+                 <i class="fas fa-shopping-cart"></i>
+                 <span class="notification-badge">3</span>
+             </a>
              <a href="{{ route('profilepage') }}"><i class="far fa-user"></i></a>
              <!-- Cart Widget -->
              <a href="#" class="cart-widget" id="cartWidget">

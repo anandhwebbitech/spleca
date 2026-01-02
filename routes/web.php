@@ -65,5 +65,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/wishlist', [FrontendController::class, 'WishlistPage'])->name('wishlistpage');
 });
 Route::post('/product/status-toggle', [ProductController::class, 'toggleStatus'])->name('product.status.toggle');
+<<<<<<< HEAD
 Route::get('/toggle-wishlist/{id}', [FrontendController::class, 'toggleWishlist'])->name('toggle-wishlist');
 Route::get('/wishlist-data', [FrontendController::class, 'getWishlist'])->name('get.wishlist');
+=======
+Route::get('/cart', [FrontendController::class, 'Cartpage'])->name('cartpage');
+>>>>>>> a466abdf638a2841477e16d47315f384a0720176
