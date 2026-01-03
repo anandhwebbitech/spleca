@@ -42,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
         } else {
             $carts = collect();
             $total = 0;
+            $wishlistCount = 0;
         }
        $categories = Category::with('subCategories')
             ->where('status', 1)

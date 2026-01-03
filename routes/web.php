@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,7 +12,6 @@ Route::get('/home', [FrontendController::class, 'Homepage'])->name('homepage');
 Route::get('/about', [FrontendController::class, 'Aboutpage'])->name('aboutpage');
 Route::get('/contact', [FrontendController::class, 'Contactpage'])->name('contactpage');
 Route::get('/newsletter', [FrontendController::class, 'Newsletterpage'])->name('newsletterpage');
-Route::get('/profile', [FrontendController::class, 'ProfilePage'])->name('profilepage');
 Route::get('/login', [FrontendController::class, 'LoginPage'])->name('loginpage');
 Route::get('/register', [FrontendController::class, 'RegisterPage'])->name('registerpage');
 Route::get('/password', [FrontendController::class, 'PasswordPage'])->name('passwordpage');
@@ -50,12 +50,17 @@ Route::get('product-resource/edit/{id}', [ProductController::class, 'ProductReso
 Route::post('product-resource/update/{id}', [ProductController::class, 'ProductResourceUpdate']);
 Route::delete('product-resource/delete/{id}', [ProductController::class, 'ProductResourceDestroy']);
 Route::get('product-resource/{product}', [ProductController::class, 'index']);
+// Orders
+Route::get('order-fetch',[OrderController::class, 'OrderFetch'] )->name('orderfetch');
+Route::get('/order', [CategoryController::class, 'OrderPage'])->name('orderpage');
+
 
 // Wishlist
 Route::post('/wishlist/toggle/{id}', [ProductController::class, 'wishlistToggle'])->name('wishlist.toggle');
 Route::get('/wishlist/count', [ProductController::class, 'wishlistCount'])->name('wishlist.count');
 // Auth
 Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [FrontendController::class, 'ProfilePage'])->name('profilepage');
 
     Route::post('/cart/add', [ProductController::class, 'addToCart'])->name('cart.add');
     Route::post('/address/save', [AuthController::class, 'AddressSave'])->name('address.save');
@@ -77,8 +82,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/payment/cod/{order_id}', [ProductController::class, 'cashOnDelivery']);
     Route::get('/payment/razorpay/{order_id}', [ProductController::class, 'razorpayPayment']);
     Route::post('/payment/save', [ProductController::class, 'savePayment'])->name('payment.save');
-
+    
+    Route::post('/product/status-toggle', [ProductController::class, 'toggleStatus'])->name('product.status.toggle');
+    Route::get('/toggle-wishlist/{id}', [FrontendController::class, 'toggleWishlist'])->name('toggle-wishlist');
 
 });
-Route::post('/product/status-toggle', [ProductController::class, 'toggleStatus'])->name('product.status.toggle');
-Route::get('/toggle-wishlist/{id}', [FrontendController::class, 'toggleWishlist'])->name('toggle-wishlist');

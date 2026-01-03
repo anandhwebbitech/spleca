@@ -59,12 +59,18 @@
              <li class="menu-item">
                  <a class="menu-link" href="{{ route('homepage') }}">Home</a>
              </li>
-             <li class="menu-item">
-                 <a class="menu-link" href="{{route('categorypage')}}">Category</a>
-             </li>
-             <li class="menu-item">
-                 <a class="menu-link" href="{{route('productpage')}}">Product</a>
-             </li>
+            @if(auth()->check() && auth()->user()->role == 1)
+             
+                <li class="menu-item">
+                    <a class="menu-link" href="{{route('categorypage')}}">Category</a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="{{route('productpage')}}">Product</a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="{{route('orderpage')}}">Orders List</a>
+                </li>
+             @endif
              <li class="menu-item">
                  <a class="menu-link" href="{{route('aboutpage')}}">About</a>
              </li>

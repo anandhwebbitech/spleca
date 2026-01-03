@@ -123,7 +123,7 @@
                 </nav>
 
                 <!-- Results + Sort -->
-                <div class="results-header">
+                <!-- <div class="results-header">
                     <h5 class="results-count">Showing 1–32 of 151 results</h5>
                     <div>
                         <select class="form-select" id="sortSelect" style="width: auto;">
@@ -134,7 +134,7 @@
                             <option value="price-high">Sort by price: high to low</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- PRODUCT GRID -->
                 <div class="row g-4" id="product-list">

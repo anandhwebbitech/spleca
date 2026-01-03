@@ -16,6 +16,10 @@ class CategoryController extends Controller
         $categories = Category::where('status', 1)->get();
         return view('pages.category', compact('categories'));
     }
+    public function OrderPage()
+    {
+        return view('pages.orderlist');
+    }
     public function fetch()
     {
         $data = SubCategory::with('category')->get();
