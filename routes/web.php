@@ -54,6 +54,9 @@ Route::get('product-resource/{product}', [ProductController::class, 'index']);
 Route::get('order-fetch',[OrderController::class, 'OrderFetch'] )->name('orderfetch');
 Route::get('/order', [CategoryController::class, 'OrderPage'])->name('orderpage');
 
+Route::get('/payment', [CategoryController::class, 'PaymentPage'])->name('paymentpage');
+Route::get('payment-fetch',[OrderController::class, 'PaymentFetch'] )->name('paymentfetch');
+
 
 // Wishlist
 Route::post('/wishlist/toggle/{id}', [ProductController::class, 'wishlistToggle'])->name('wishlist.toggle');
@@ -85,5 +88,5 @@ Route::middleware(['auth'])->group(function () {
     
     Route::post('/product/status-toggle', [ProductController::class, 'toggleStatus'])->name('product.status.toggle');
     Route::get('/toggle-wishlist/{id}', [FrontendController::class, 'toggleWishlist'])->name('toggle-wishlist');
-
+    Route::post('/orders/cancel', [FrontendController::class, 'cancelOrder'])->name('cancel.order');
 });

@@ -7,9 +7,11 @@ use App\Models\Cart;
 use App\Models\Category;
 use App\Models\CustomerAddress;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 
 class FrontendController extends Controller
@@ -21,7 +23,33 @@ class FrontendController extends Controller
     }
     public function Cartpage()
     {
-        return view("pages.cart");
+        $cartItems = Cart::with('product.images')
+            ->where('user_id', Auth::id())
+            ->get();
+
+        $subtotal = 0;
+        $discountTotal = 0;
+        $ori_price = 0;
+
+        foreach ($cartItems as $item) {
+            $price = $item->product->price;
+            $discount = $item->discount ?? 0;
+
+            $discountAmount = ($price * $discount) / 100;
+            $subtotal += $price * $item->quantity;
+            $ori_price +=  $item->product->original_price * $item->quantity;
+            $discountTotal += $discountAmount * $item->quantity;
+        }
+
+        $gst = ($subtotal - $discountTotal) * 0.18;
+        $total = ($subtotal - $discountTotal) + $gst;
+        return view("pages.cart", compact(
+            'cartItems',
+            'subtotal',
+            'discountTotal',
+            'gst',
+            'total','ori_price'
+        ));
     }
     public function CheckoutPage()
     {
@@ -31,6 +59,7 @@ class FrontendController extends Controller
 
         $subtotal = 0;
         $discountTotal = 0;
+        $ori_price = 0;
 
         foreach ($cartItems as $item) {
             $price = $item->product->price;
@@ -38,6 +67,7 @@ class FrontendController extends Controller
 
             $discountAmount = ($price * $discount) / 100;
             $subtotal += $price * $item->quantity;
+            $ori_price +=  $item->product->original_price * $item->quantity;
             $discountTotal += $discountAmount * $item->quantity;
         }
 
@@ -48,7 +78,7 @@ class FrontendController extends Controller
             'subtotal',
             'discountTotal',
             'gst',
-            'total'
+            'total','ori_price'
         ));
     }
     public function HomePage()
@@ -258,7 +288,28 @@ class FrontendController extends Controller
             'addresses' => $addresses
         ]);
     }
+    public function cancelOrder(Request $request)
+    {
+        $order = OrderItem::where('order_id', $request->order_id)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
 
+        if ($order->order_status == Order::Cancel) {  
+            return response()->json([
+                'message' => 'Delivered orders cannot be cancelled.'
+            ], 422);
+        }
+
+        $order->order_status = Order::Cancel   ;   // CANCELLED
+        $order->save();
+        // OrderItem::where('order_id', $request->order_id)
+        //     ->update([
+        //         'order_status' => Order::Cancel   
+        //     ]);
+        return response()->json([
+            'message' => 'Order cancelled successfully.'
+        ]);
+    }
 
 
 }

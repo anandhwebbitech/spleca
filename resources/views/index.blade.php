@@ -142,7 +142,7 @@
                              <span class="current-price">₹{{ number_format($product->original_price, 2) }}</span>
                              <span class="original-price">₹{{ number_format($product->price, 2) }}</span>
                          </div>
-                         <button class="btn-cart" data-id="{{ $product->id }}">Add to Cart</button>
+                         <button class="btn-cart add-to-cart" data-id="{{ $product->id }}">Add to Cart</button>
                          <button class="btn-view">View Details</button>
                      </div>
                  </div>
@@ -310,7 +310,7 @@
                             </span>
                         </div>
 
-                        <button class="btn-cart" data-id="{{ $product->id }}">
+                        <button class="btn-cart add-to-cart" data-id="{{ $product->id }}">
                             Add to Cart
                         </button>
                        <button class="btn-view"

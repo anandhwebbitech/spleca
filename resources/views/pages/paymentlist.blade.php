@@ -3,42 +3,42 @@
 <style>
 
 /* ---- TABLE FONT SIZE ---- */
-#orderTable,
-#orderTable th,
-#orderTable td {
+#paymentTable,
+#paymentTable th,
+#paymentTable td {
     font-size: 12px !important;   /* smaller text */
 }
 
 /* ---- TABLE HEADER ---- */
-#orderTable th {
+#paymentTable th {
     padding: 6px 8px !important;
 }
 
 /* ---- TABLE CELLS ---- */
-#orderTable td {
+#paymentTable td {
     padding: 6px 8px !important;
 }
 
 /* ---- VIEW BUTTON SMALL ---- */
-#orderTable .btn,
-#orderTable .btn-primary {
+#paymentTable .btn,
+#paymentTable .btn-primary {
     font-size: 11px;
     padding: 3px 8px;
     border-radius: 4px;
 }
 
 /* ---- STATUS BADGE SMALL ---- */
-#orderTable .badge {
+#paymentTable .badge {
     font-size: 10px;
     padding: 4px 8px;
     border-radius: 8px;
 }
-#orderTable {
+#paymentTable {
     width: 100% !important;
 }
 
-#orderTable th,
-#orderTable td {
+#paymentTable th,
+#paymentTable td {
     white-space: nowrap;   /* prevent wrapping */
     text-align: center;    /* optional - aligns nicely */
 }
@@ -46,7 +46,7 @@
 
  <section class="page-banner">
      <div class="content-wrapper">
-         <h1>Orders</h1>
+         <h1>Online Payment</h1>
          <div class="breadcrumb">
              <a href="index.php">
                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -56,7 +56,7 @@
                  Home
              </a>
              <span>/</span>
-             <span>Order List</span>
+             <span>Payment List</span>
          </div>
      </div>
  </section>
@@ -74,18 +74,14 @@
          <div class="row g-0">
             <div class="table-responsive">
 
-             <table class="table table-bordered table-hover nowrap" id="orderTable" style="width:100%">
+             <table class="table table-bordered table-hover nowrap" id="paymentTable" style="width:100%">
                  <thead>
                      <tr>
                          <th>S.No</th>
-                         <th>Action</th>
                          <th>Order Id</th>
                          <th>Customer Name</th>
-                         <th>Product Name</th>
-                         <th>Discount</th>
+                         <th>Payment Id</th>
                          <th>Total Amount</th>
-                         <th>Order Date</th>
-                         <th>Delivery Date</th>
                          <th>Status</th>
                      </tr>
                  </thead>
@@ -110,23 +106,20 @@
      let table;
 
   $(document).ready(function () {
-    $('#orderTable').DataTable({
+    $('#paymentTable').DataTable({
         processing: true,
         serverSide: true,
         responsive: false,
         autoWidth: false,
-        ajax: "{{ route('orderfetch') }}",
+        ajax: "{{ route('paymentfetch') }}",
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'action', name: 'action', orderable: false, searchable: false },
-            { data: 'order_id', name: 'order.id' },
-            { data: 'customer_name', name: 'order.user.name' },
-            { data: 'product_name', name: 'product.name' },
-            { data: 'discount', name: 'discount' },
-            { data: 'total_amount', name: 'total_price' },
-            { data: 'order_date', name: 'order.created_at' },
-            { data: 'delivery_date', name: 'order.delivery_date' },
-            { data: 'status', name: 'status', orderable: false, searchable: false },
+            { data: 'razorpay_order_id', name: 'razorpay_order_id' },
+            { data: 'customer_name', name: 'customer_name' },
+            { data: 'product_name', name: 'product_name' },
+            { data: 'total_amount', name: 'total_amount' },
+            { data: 'status', name: 'status' },
+            
         ]
     });
 });

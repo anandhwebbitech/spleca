@@ -44,24 +44,27 @@
                  <h2 class="summary-title-heading">Order Summary</h2>
 
                  <div class="summary-line-item">
-                     <span class="summary-line-label">Subtotal (7 items)</span>
+                     <span class="summary-line-label">Price </span>
                      <span class="summary-line-value">₹{{ number_format($subtotal,2) }}</span>
                  </div>
+                <div class="summary-line-item discount-line-item">
+                     <span class="summary-line-label">Discount </span>
+                     <span class="summary-line-value">-₹{{ number_format($discountTotal,2) }}</span>
+                 </div>
+                   <div class="summary-line-item ">
+                     <span class="summary-line-label">Subtotal </span>
+                     <span class="summary-line-value">₹{{ number_format($ori_price,2) }}</span>
+                 </div>
+                 <hr>
                  <div class="summary-line-item">
                      <span class="summary-line-label">Tax (GST 18%)</span>
                      <span class="summary-line-value">₹{{ number_format($gst,2) }}</span>
                  </div>
-
-                 <div class="summary-line-item discount-line-item">
-                     <span class="summary-line-label">Discount (25%)</span>
-                     <span class="summary-line-value">-₹{{ number_format($discountTotal,2) }}</span>
-                 </div>
-
                  <div class="summary-line-item">
                      <span class="summary-line-label">Shipping</span>
                      <span class="summary-line-value">Free</span>
                  </div>
-
+                    <hr>
                  <hr class="summary-separator-line">
 
                  <div class="total-summary-row">

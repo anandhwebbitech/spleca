@@ -1,4 +1,20 @@
  <!-- Top Bar -->
+  <style>
+    .primary-menu .menu-link {
+    font-size: 13px;     /* smaller text */
+    line-height: 1.3;
+}
+
+.primary-menu .dropdown-menu-full a {
+    font-size: 12px;     /* dropdown items */
+}
+
+.category-grid .category-card a,
+.subcategory-list a {
+    font-size: 12px;
+}
+
+  </style>
  <div class="top-bar">
      <div class="container">
          <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -69,6 +85,9 @@
                 </li>
                 <li class="menu-item">
                     <a class="menu-link" href="{{route('orderpage')}}">Orders List</a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="{{route('paymentpage')}}">Payment </a>
                 </li>
              @endif
              <li class="menu-item">
@@ -163,7 +182,7 @@
              </li>
              <li class="menu-item">
                  <a class="menu-link btn-contact" href="{{route('contactpage')}}">
-                     <i class="fa-solid fa-phone"></i> Contact Us
+                     <i class="fa-solid fa-phone"></i>Contact Us
                  </a>
              </li>
          </ul>
@@ -429,8 +448,8 @@
 
          <div class="wb-footer">
              <a href="{{route('wishlistpage')}}" aria-label="Wishlist"><i class="fa-regular fa-heart"></i><span class="wb-badge">3</span></a>
-             <a href="#" aria-label="User"><i class="fa-regular fa-user"></i></a>
-             <a href="#" aria-label="Cart"><i class="fa-solid fa-cart-shopping"></i></a>
+             <a href="{{ route('profilepage') }}" aria-label="User"><i class="fa-regular fa-user"></i></a>
+             <a href="{{route('cartpage')}}"  aria-label="Cart"><i class="fa-solid fa-cart-shopping"></i></a>
          </div>
      </div>
  </nav>

@@ -321,6 +321,7 @@
      </div>
  </div>
  @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
  <script>
      $(document).ready(function() {
@@ -556,7 +557,8 @@
          });
      });
     function loadOrders() {
-        const productBaseUrl = "{{ url('/product') }}";
+    const productBaseUrl = "{{ url('/product') }}";
+
     $.ajax({
         url: "{{ route('user.orders') }}",
         type: "GET",
@@ -568,14 +570,19 @@
             }
 
             $.each(response.orders, function (index, order) {
+
+                let badgeClass =
+                    order.status === 'DELIVERED' ? 'bg-success' :
+                    order.status === 'CANCELLED' ? 'bg-danger'  :
+                    order.status === 'RETURNED'  ? 'bg-info'    :
+                                                   'bg-warning';
+
                 html += `
                 <div class="col-md-6 mb-4">
                     <div class="info-card p-3 h-100">
                         <div class="row">
                             <div class="col-4">
-                                <img src="${order.image}" 
-                                     class="img-fluid rounded"
-                                     style="max-width:120px">
+                                <img src="${order.image}" class="img-fluid rounded" style="max-width:120px">
                             </div>
 
                             <div class="col-8">
@@ -586,16 +593,28 @@
 
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     <strong>₹${order.price}</strong>
-                                    <span class="badge bg-warning">${order.status}</span>
+                                    <span class="badge ${badgeClass}">${order.status}</span>
                                 </div>
                             </div>
                         </div>
 
                         <hr>
-                        <a  href="${productBaseUrl}/${order.product_id}"
+
+                        <a href="${productBaseUrl}/${order.product_id}"
                            class="btn btn-outline-primary btn-sm">
                            View Details
                         </a>
+
+                        ${
+                          order.status !== 'DELIVERED' &&
+                          order.status !== 'CANCELLED' &&
+                          order.status !== 'RETURNED'
+                            ? `<button class="btn btn-outline-danger btn-sm cancel-order"
+                                       data-id="${order.id}">
+                                       Cancel Order
+                               </button>`
+                            : ''
+                        }
                     </div>
                 </div>`;
             });
@@ -604,6 +623,40 @@
         }
     });
 }
+$(document).on('click', '.cancel-order', function () {
+    let orderId = $(this).data('id');
+
+    Swal.fire({
+        title: "Cancel this order?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, cancel it!",
+        cancelButtonText: "No",
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: "{{ route('cancel.order') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    order_id: orderId
+                },
+                success: function (res) {
+
+                    Swal.fire("Cancelled!", res.message, "success");
+
+                    loadOrders();   // reload list
+                },
+                error: function () {
+                    Swal.fire("Error", "Something went wrong.", "error");
+                }
+            });
+
+        }
+    });
+});
  </script>
  @endpush
 

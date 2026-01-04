@@ -20,31 +20,38 @@
                  <h2 class="summary-heading-text">Order Summary</h2>
 
                  <div class="summary-detail-row">
-                     <span class="summary-field-label">Subtotal </span>
-                     <span class="summary-field-value">₹23,719</span>
+                     <span class="summary-field-label">Price </span>
+                     <span class="summary-field-value">₹{{ number_format($subtotal,2) }}</span>
                  </div>
 
                  <div class="summary-detail-row discount-amount-row">
                      <span class="summary-field-label">Total Discount </span>
-                     <span class="summary-field-value">-₹5,930</span>
+                     <span class="summary-field-value">-₹{{ number_format($discountTotal,2) }}</span>
                  </div>
+                 <div class="summary-detail-row">
+                     <span class="summary-field-label">Subtotal </span>
+                     <span class="summary-field-value">₹{{ number_format($ori_price,2) }}</span>
+                 </div>
+                 <hr>
 
                  <div class="summary-detail-row">
                      <span class="summary-field-label">Shipping</span>
                      <span class="summary-field-value">Free</span>
                  </div>
+                 
+                 <hr>
 
                  <div class="summary-detail-row">
                      <span class="summary-field-label">Tax (GST 18%)</span>
-                     <span class="summary-field-value">₹3,202</span>
+                     <span class="summary-field-value">₹{{ number_format($gst,2) }}</span>
                  </div>
 
                  <hr class="summary-divider-line">
 
                  <div class="total-amount-section">
                      <span class="total-text-label">Total</span>
-                     <span class="total-price-display">₹20,991</span>
-                 </div>
+                     <span class="total-price-display">₹{{ number_format($total,2) }}</span>
+                 </div> 
 
                  <button class="checkout-primary-btn" onclick="proceedCheckout()">
                      <i class="fas fa-lock me-2"></i>Proceed to Checkout
@@ -157,26 +164,26 @@
 
      function updateSummary(subtotal, totalItems, discountamount) {
 
-         subtotal = parseFloat(subtotal);
+        //  subtotal = parseFloat(subtotal);
 
-         let taxPercent = 18;
-         let tax = (subtotal * taxPercent) / 100;
-         let total = subtotal - discountamount + tax;
+        //  let taxPercent = 18;
+        //  let tax = (subtotal * taxPercent) / 100;
+        //  let total = subtotal - discountamount + tax;
 
          
 
-         $('.summary-field-value').eq(0)
-             .text(`₹${subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
+        //  $('.summary-field-value').eq(0)
+        //      .text(`₹${subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
 
-         // No extra discount here (already applied per item)
+        //  // No extra discount here (already applied per item)
          
-         $('.discount-amount-row .summary-field-value').text(discountamount);
+        //  $('.discount-amount-row .summary-field-value').text(discountamount);
 
-         $('.summary-detail-row').eq(3).find('.summary-field-value')
-             .text(`₹${tax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
+        //  $('.summary-detail-row').eq(3).find('.summary-field-value')
+        //      .text(`₹${tax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
 
-         $('.total-price-display')
-             .text(`₹${total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
+        //  $('.total-price-display')
+        //      .text(`₹${total.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`);
      }
 
      function removeCartItem(cartId) {
@@ -236,6 +243,8 @@
         success: function (response) {
             if (response.status === 'success') {
                 loadCart(); // reload cart with new calculations
+                location.reload();   // ⬅ reload the page
+
             } else {
                 alert(response.message);
             }

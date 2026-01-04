@@ -20,6 +20,10 @@ class CategoryController extends Controller
     {
         return view('pages.orderlist');
     }
+    public function PaymentPage()
+    {
+        return view('pages.paymentlist');
+    }
     public function fetch()
     {
         $data = SubCategory::with('category')->get();

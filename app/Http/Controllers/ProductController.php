@@ -477,121 +477,130 @@ class ProductController extends Controller
             'offer_price' => $cart->offer_price
         ]);
     }
-   public function placeOrder(Request $request)
-{
-    $request->validate([
-        'address_id' => 'required|exists:customer_addresses,id'
-    ]);
-
-    $userId = Auth::id();
-
-    $cartItems = Cart::with('product')
-        ->where('user_id', $userId)
-        ->get();
-
-    if ($cartItems->isEmpty()) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Your cart is empty'
-        ]);
-    }
-
-    DB::beginTransaction();
-
-    try {
-        $subtotal = 0;
-        $discount = 0;
-
-        foreach ($cartItems as $item) {
-            $subtotal += $item->product->price * $item->quantity;
-             $cartdiscount = $item->discount ?? 0;
-             $discountAmount = ($item->price * $cartdiscount) / 100;
-             $discountTotal = $discountAmount * $item->quantity;
-            $discount += $discountTotal;
-        }
-
-        $tax = $subtotal * 0.18;
-        $total = $subtotal - $discount + $tax;
-
-        // Create Order
-        $order = Order::create([
-            'user_id'       => $userId,
-            'address_id'    => $request->address_id,
-            'price'         => $subtotal,
-            'discount'      => $discount,
-            'tax'           => $tax,
-            'original_price'   => $total,
-            'order_date'    => now(),
-            'delivery_date' => now()->addDays(7),
-            'status'        => 1 // Pending
+    public function placeOrder(Request $request)
+    {
+        $request->validate([
+            'address_id' => 'required|exists:customer_addresses,id'
         ]);
 
-        // Create Order Items
-        foreach ($cartItems as $item) {
-            OrderItem::create([
-                'order_id'      => $order->id,
-                'product_id'    => $item->product_id,
-                'quantity'      => $item->quantity,
-                'price'         => $item->product->price,
-                'original_price'   => $item->product->price * $item->quantity,
-                'discount' => $item->discount
+        $userId = Auth::id();
+
+        $cartItems = Cart::with('product')
+            ->where('user_id', $userId)
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Your cart is empty'
             ]);
         }
 
-        // Clear Cart
-        Cart::where('user_id', $userId)->delete();
+        DB::beginTransaction();
 
-        DB::commit();
+        try {
+            $subtotal = 0;
+            $discount = 0;
+
+            foreach ($cartItems as $item) {
+                $subtotal += $item->product->price * $item->quantity;
+                $cartdiscount = $item->discount ?? 0;
+                // $discountAmount = ($item->price * $cartdiscount) / 100;
+                $discountAmount = ($item->product->price *$item->product->discount_percent) / 100;
+                $discountTotal = $discountAmount * $item->quantity;
+                $discount += $discountTotal;
+            }
+
+            $tax = $subtotal * 0.18;
+            $total = $subtotal - $discount + $tax;
+            // dd($total,$discount);
+            // Create Order
+            $order = Order::create([
+                'user_id'       => $userId,
+                'address_id'    => $request->address_id,
+                'price'         => $subtotal,
+                'discount'      => $discount,
+                'tax'           => $tax,
+                'original_price'   => $total,
+                'order_date'    => now(),
+                'delivery_date' => now()->addDays(7),
+                'status'        => 1 ,// Pending
+                'quantity'      => $item->quantity,
+
+            ]);
+
+            // Create Order Items
+            foreach ($cartItems as $item) {
+                OrderItem::create([
+                    'order_id'      => $order->id,
+                    'product_id'    => $item->product_id,
+                    'quantity'      => $item->quantity,
+                    'price'         => $item->product->price,
+                    'original_price'   => $item->product->original_price * $item->quantity,
+                    'discount'      => $item->discount
+                ]);
+            }
+
+            // Clear Cart
+            Cart::where('user_id', $userId)->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'order_id' => $order->id
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function userOrders()
+    {
+        $orders = OrderItem::with(['order', 'product.images'])
+            ->whereHas('order', function ($q) {
+                $q->where('user_id', auth()->id());
+            })->where('status', 2)
+            ->latest()
+            ->get()
+            ->map(function ($item) {
+                $status = $item->order_status;
+                return [
+                    'id'           => $item->order->id,
+                    'product_name' => $item->product->name,
+                    'product_id'    => $item->product->id,
+                    'quantity'     => $item->quantity,
+                    'price'        => $item->original_price,
+                    'status' =>
+                    $status == Order::Complete ? 'DELIVERED' : ($status == Order::Cancel   ? 'CANCELLED' : ($status == Order::Return   ? 'RETURNED'  : 'PENDING')),
+                    'order_date'   => $item->order->created_at->format('D M d Y'),
+                    // 'image'        => asset('public/uploads/products/' . $item->product->images[0]->image)
+                    'image'        => asset('public/uploads/products/' .
+                        optional($item->product->images->first())->image)
+                ];
+            });
 
         return response()->json([
-            'status' => 'success',
-            'order_id' => $order->id
-        ]);
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-
-        return response()->json([
-            'status' => 'error',
-            'message' => $e->getMessage()
+            'orders' => $orders
         ]);
     }
-}
-
-public function userOrders()
-{
-    $orders = OrderItem::with(['order', 'product.images'])
-        ->whereHas('order', function ($q) {
-            $q->where('user_id', auth()->id())->where('status',2);
-        })
-        ->latest()
-        ->get()
-        ->map(function ($item) {
-            return [
-                'id'           => $item->order->id,
-                'product_name' => $item->product->name,
-                'product_id'    => $item->product->id,
-                'quantity'     => $item->quantity,
-                'price'        => $item->price,
-                'status'       => $item->order->status == 3 ? 'DELIVERED' : 'PENDING',
-                'order_date'   => $item->order->created_at->format('D M d Y'),
-                'image'        => asset('public/uploads/products/' . $item->product->images[0]->image)
-            ];
-        });
-
-    return response()->json([
-        'orders' => $orders
-    ]);
-}
-public function ShowPay($orderId)
-{
-    $order = Order::findOrFail($orderId);
-    return view('pages.select-payment', compact('order'));
-}
+    public function ShowPay($orderId)
+    {
+        $order = Order::findOrFail($orderId);
+        return view('pages.select-payment', compact('order'));
+    }
     public function cashOnDelivery($order_id)
     {
         $order = Order::findOrFail($order_id);
-
+        OrderItem::where('order_id', $order_id)
+            ->update([
+                'status' => 2   // processing/placed
+            ]);
         $order->update([
             'payment_type' => 'cod',
             'payment_status' => '1',
@@ -601,7 +610,7 @@ public function ShowPay($orderId)
         // return redirect("/order-success/".$order_id);
         return redirect()->route('profilepage');
     }
-        public function razorpayPayment($order_id)
+    public function razorpayPayment($order_id)
     {
         $order = Order::findOrFail($order_id);
 
@@ -618,39 +627,47 @@ public function ShowPay($orderId)
             'amount' => $order->original_price * 100,  // amount in paise
             'currency' => 'INR'
         ]);
+        OrderItem::where('order_id', $order_id)
+            ->update([
+                'status' => 2   // processing/placed
+            ]);
+        $order->update([
+            'payment_type' => 'Online',
+            'payment_status' => '1',
+            'status' => '2'
+        ]);
         return view('pages.razorpay_payment', [
             'order' => $order,
             'rOrder' => $razorOrder
         ]);
     }
     public function savePayment(Request $request)
-{
-    try {
-        $request->validate([
-            'order_id' => 'required|exists:orders,id',
-            'razorpay_payment_id' => 'required',
-            'razorpay_order_id' => 'required',
-            'razorpay_signature' => 'required',
-            'amount' => 'required|numeric'
-        ]);
+    {
+        try {
+            $request->validate([
+                'order_id' => 'required|exists:orders,id',
+                'razorpay_payment_id' => 'required',
+                'razorpay_order_id' => 'required',
+                'razorpay_signature' => 'required',
+                'amount' => 'required|numeric'
+            ]);
 
-        $payment = Payment::create([
-            'order_id' => $request->order_id,
-            'razorpay_payment_id' => $request->razorpay_payment_id,
-            'razorpay_order_id' => $request->razorpay_order_id,
-            'razorpay_signature' => $request->razorpay_signature,
-            'amount' => $request->amount,
-            'status' => 'completed'
-        ]);
+            $payment = Payment::create([
+                'order_id' => $request->order_id,
+                'razorpay_payment_id' => $request->razorpay_payment_id,
+                'razorpay_order_id' => $request->razorpay_order_id,
+                'razorpay_signature' => $request->razorpay_signature,
+                'amount' => $request->amount,
+                'status' => 'completed'
+            ]);
 
-        return response()->json(['status' => 'success', 'payment_id' => $payment->id]);
-    } catch (\Exception $e) {
-        // Return JSON with error message
-        return response()->json([
-            'status' => 'error',
-            'message' => $e->getMessage()
-        ], 500);
+            return response()->json(['status' => 'success', 'payment_id' => $payment->id]);
+        } catch (\Exception $e) {
+            // Return JSON with error message
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
-}
-
 }

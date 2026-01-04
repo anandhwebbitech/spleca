@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     //
+    const Pending = 1;
+    const Complete = 3;
+    const Cancel = 4;
+    const Return =5;
     protected $guarded = [];
     public function user()
     {
