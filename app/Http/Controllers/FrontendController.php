@@ -105,16 +105,13 @@ class FrontendController extends Controller
     {
         return view('pages.product-solutions');
     }
-    public function ProductsPage()
+    public function ProductsPage(Request $request)
     {
-        // $products = Product::with('images')
-        // ->where('status', 1)
-        // ->paginate(9);
         $categories = Category::with('subCategories')
             ->where('status', 1)
             ->get();
-        return view('pages.application-area', compact('categories'));
-        // return view('pages.application-area');
+        $selectedSubCategory = $request->subcategory;   
+        return view('pages.application-area', compact('categories','selectedSubCategory'));
     }
     // Loads
     public function login(Request $request)

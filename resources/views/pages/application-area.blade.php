@@ -18,7 +18,7 @@
                             </div>
                             <div id="cat-{{ $category->id }}-content" class="filter-content">
                                 @foreach($category->subCategories as $sub)
-                                    <label><input type="checkbox"class="category-filter" value="{{ $sub->id }}" name="categories[]"> {{ $sub->sub_category_name }}</label>
+                                    <label><input type="checkbox"class="category-filter" value="{{ $sub->id }}" name="categories[]" {{ isset($selectedSubCategory) && $selectedSubCategory == $sub->id ? 'checked' : '' }}> {{ $sub->sub_category_name }}</label>
                                 @endforeach
                                 
                             </div>

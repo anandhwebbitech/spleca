@@ -94,7 +94,8 @@
                                         </a>
                                         <ul class="subcategory-list">
                                             @foreach($category->subCategories as $sub)
-                                                <li><a  href="{{route(name: 'allproductspage')}}"><i class="fa-solid fa-circle"></i> {{ $sub->sub_category_name }}</a></li>  
+                                                <!-- <li><a  href="{{route(name: 'allproductspage')}}"><i class="fa-solid fa-circle"></i> {{ $sub->sub_category_name }}</a></li>   -->
+                                                <li><a  href="{{ route('allproductspage', ['subcategory' => $sub->id]) }}"><i class="fa-solid fa-circle"></i> {{ $sub->sub_category_name }}</a></li>  
                                             @endforeach
                                         </ul>
                                     </li>
