@@ -49,7 +49,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
  <script>
      $('#loginBtn').click(function() {
-         alert(4)
          $.ajax({
              url: "{{ route('login') }}",
              type: "POST",
