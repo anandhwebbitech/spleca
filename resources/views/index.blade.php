@@ -334,7 +334,7 @@
 
 
      <!-- slider 2 -->
-     <div class="container py-5 first-swip" id="best-seller-section">
+     <div class="container py-5 scnd-swip" id="best-seller-section">
          <h2 class="text-center">Best Seller</h2>
 
          <div class="swiper main-swiper second-swip hei8" id="best-seller-carousel">

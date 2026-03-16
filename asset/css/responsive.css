@@ -158,12 +158,20 @@
 
 @media (max-width: 768px) {
 
+    .banban {
+        height: 200px;
+    }
+
     .second-swip {
-        height: 850px !important;
+        height: 850px;
     }
     
     .first-swip {
-        height: 850px !important;
+        height: 675px;
+    }
+
+    .scnd-swip {
+        height: ;
     }
 
     .content-wrapper {
@@ -535,9 +543,9 @@
     }
 
     /* swiper */
-    .swiper {
+    /* .swiper {
         height: 400px;
-    }
+    } */
 
     .welcome-section {
         padding: 60px 0;

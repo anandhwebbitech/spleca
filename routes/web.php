@@ -23,6 +23,9 @@ Route::get('/productsolutions', [FrontendController::class, 'ProductSolutionsPag
 Route::get('/products', [FrontendController::class, 'ProductsPage'])->name('allproductspage');
 Route::get('/products/ajax', [FrontendController::class, 'GetProducts'])->name('getproducts');
 Route::post('/review-store', [FrontendController::class, 'storeReview'])->name('review.store');
+Route::get('/bloglist', [FrontendController::class, 'BlogList'])->name('bloglist');
+Route::get('/blog1', [FrontendController::class, 'Blog1'])->name('blog1');
+
 // Route::get('/category', [CategoryController::class, 'CategoryPage'])->name('categorypage');
 
 Route::post('/register', [AuthController::class, 'Register'])->name('register');

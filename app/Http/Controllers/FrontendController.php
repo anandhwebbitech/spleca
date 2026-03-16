@@ -22,6 +22,14 @@ class FrontendController extends Controller
     {
         return view("pages.about");
     }
+    public function BlogList()
+    {
+        return view("pages.blog-list");
+    }
+      public function Blog1()
+    {
+        return view("pages.blog1");
+    }
     public function Cartpage()
     {
         $cartItems = Cart::with('product.images')

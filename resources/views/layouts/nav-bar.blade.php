@@ -280,6 +280,11 @@
                                          <i class="fas fa-newspaper"></i> News Letter
                                      </a>
                                  </li>
+                                 <li class="category-card">
+                                     <a href="{{ route('bloglist') }}">
+                                         <i class="fas fa-newspaper"></i> Blog
+                                     </a>
+                                 </li>
                              </ul>
                          </div>
                      </div>
